@@ -64,3 +64,6 @@ GET /history/name _i.e. http://127.0.0.1:5000/history/name_
 POST /shopping
 
 POST /auth
+
+## Resources
+https://github.com/MaBlaGit/REST_API_Flask
