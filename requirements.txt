@@ -4,11 +4,13 @@ chardet==3.0.4
 Click==7.0
 Flask==1.1.1
 Flask-Cors==3.0.8
+Flask-JWT==0.3.2
 Flask-RESTful==0.3.7
 idna==2.8
 itsdangerous==1.1.0
 Jinja2==2.11.1
 MarkupSafe==1.1.1
+PyJWT==1.4.2
 pytz==2019.3
 requests==2.22.0
 six==1.14.0
