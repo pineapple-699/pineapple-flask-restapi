@@ -1,0 +1,22 @@
+{
+  "name": "pineapple-flask-restapi",
+  "version": "0.2.5",
+  "private": true,
+  "scripts": {
+    "start": "python app.py",
+    "coverage": "codecov --token='TOKENTOKENTOKEN'",
+    "test": "",
+    "reinstall": "rm -rf venv/ && virtualenv venv && pip install -r requirements.txt",
+    "gh-prune": "git fetch -p && for branch in `git branch -vv | grep ': gone]' | awk '{print $1}'`; do git branch -D $branch; done",
+    "release": "standard-version"
+  },
+  "pre-commit": {
+    "run": []
+  },
+  "devDependencies": {
+    "codecov": "3.6.1",
+    "pre-commit": "1.2.2",
+    "standard-version": "7.0.0"
+  },
+  "snyk": true
+}

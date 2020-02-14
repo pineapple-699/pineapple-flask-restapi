@@ -1,6 +1,6 @@
 # Pineapple Flask-REST-API
-[![Build Status](https://travis-ci.com/pineapple-699/pineapple-react.svg?branch=master)](https://travis-ci.com/pineapple-699/pineapple-react)
-[![codecov](https://codecov.io/gh/pineapple-699/pineapple-react/branch/master/graph/badge.svg)](https://codecov.io/gh/pineapple-699/pineapple-react)
+[![Build Status](https://travis-ci.com/pineapple-699/pineapple-flask-restapi.svg?branch=master)](https://travis-ci.com/pineapple-699/pineapple-flask-restapi)
+[![codecov](https://codecov.io/gh/pineapple-699/pineapple-flask-restapi/branch/master/graph/badge.svg)](https://codecov.io/gh/pineapple-699/pineapple-flask-restapi)
 
 
 ## Development
