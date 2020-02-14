@@ -1,7 +1,7 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
 from flask_restful import Resource, Api
-from flask_jwt import JWT, jwt_required, JWTError
+# from flask_jwt import JWT, jwt_required, JWTError
 
 
 from endpoints.user import User, UserList, UserRegister
