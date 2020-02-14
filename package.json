@@ -16,7 +16,7 @@
   "devDependencies": {
     "codecov": "3.6.1",
     "pre-commit": "1.2.2",
-    "standard-version": "7.0.0"
+    "standard-version": "7.1.0"
   },
   "snyk": true
 }
