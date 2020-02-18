@@ -5,7 +5,7 @@
 
 ## Development
 
-This project is built with [Flask](https://flask.palletsprojects.com/en/1.1.x/). 
+This project is built wit [Flask](https://flask.palletsprojects.com/en/1.1.x/). 
 
 ## Project Layout
 | Key Folder | Parent Folder | Description |
