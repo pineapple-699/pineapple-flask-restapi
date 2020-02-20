@@ -14,7 +14,7 @@ class InventoryModel:
         products = list()
         connection = sqlite3.connect('./db/pineapplestore.db')
         cursor = connection.cursor()
-        query = 'SELECT * FROM nventory WHERE product=?;'
+        query = 'SELECT * FROM inventory WHERE product=?;'
         result = cursor.execute(query, (product,))
         rows = result.fetchall()
         if rows:

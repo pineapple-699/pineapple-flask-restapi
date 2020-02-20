@@ -20,6 +20,7 @@ after_success:
 #  - codecov
 
 script:
-  - virtualenv venv
-  - source venv/bin/activate
-#  - python app.py
+  # - virtualenv venv
+  # - source venv/bin/activate
+  - python ./db/database.py
+  # - python app.py
