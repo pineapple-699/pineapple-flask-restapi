@@ -3,11 +3,17 @@ import sqlite3
 
 class UserModel:
 
-    def __init__(self, id, username, password, address):
+    def __init__(self, id, username, password, address, sex, shoe_size, shirt_size,pant_size_waist, pant_size_length):
         self.id = id
         self.username = username
         self.password = password
         self.address = address
+        self.sex = sex
+        self.shoe_size = shoe_size
+        self.shirt_size = shirt_size
+        self.pant_size_waist = pant_size_waist
+        self.pant_size_length = pant_size_length
+
 
     @classmethod
     def find_by_name(cls, name, db_path='./db/pineapplestore.db'):
@@ -18,7 +24,7 @@ class UserModel:
         rows = result.fetchall()
         if rows:
             for row in rows:
-                user = UserModel(row[0], row[1], row[2],row[3])
+                user = UserModel(row[0], row[1], row[2],row[3], row[4], row[5], row[6], row[7], row[8])
             connection.close()
             return user
 
@@ -32,7 +38,7 @@ class UserModel:
         rows = result.fetchall()
         if rows:
             for row in rows:
-                user = UserModel(row[0], row[1], row[2], row[3])
+                user = UserModel(row[0], row[1], row[2],row[3], row[4], row[5], row[6], row[7], row[8])
             connection.close()
             return user
 
@@ -55,7 +61,7 @@ class UserModel:
         rows = result.fetchall()
         if rows:
             for row in rows:
-                users.append(UserModel(row[0], row[1], row[2],row[3]))
+                users.append(UserModel(row[0], row[1], row[2],row[3], row[4], row[5], row[6], row[7], row[8]))
             return users
         connection.close()
 
@@ -80,5 +86,11 @@ class UserModel:
         return {
             'id': self.id,
             'username': self.username,
-            'password': self.password
+            'address': self.address,
+            'sex': self.sex,
+            'shoe_size': self.shoe_size,
+            'shirt_size': self.shirt_size,
+            'pant_size_waist': self.pant_size_waist,
+            'pant_size_length': self.pant_size_length 
+            # 'password': self.password
         }
