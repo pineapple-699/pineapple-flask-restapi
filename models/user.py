@@ -46,7 +46,7 @@ class UserModel:
     def insert_into_table(cls, username, password, db_path='./db/pineapplestore.db'):
         connection = sqlite3.connect(db_path)
         cursor = connection.cursor()
-        query = 'INSERT INTO user VALUES(NULL, ?, ?)'
+        query = 'INSERT INTO user VALUES(NULL, ?, ?,NULL,NULL,NULL,NULL,NULL,NULL)'
         cursor.execute(query, (username, password))
         connection.commit()
         connection.close()

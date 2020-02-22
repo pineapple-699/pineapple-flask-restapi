@@ -5,7 +5,7 @@ cursor = connection.cursor()
 create_user_table = '{}{}{}'.format(
     'CREATE TABLE IF NOT EXISTS',
     ' user(id INTEGER PRIMARY KEY,',
-    ' username text NOT NULL, password text NOT NULL, address text NOT NULL, sex text NOT NULL, shoe_size FLOAT, pant_size_waist INTEGER, pant_size_length INTEGER, shirt_size TEXT);'
+    ' username text NOT NULL, password text NOT NULL, address text, sex text, shoe_size FLOAT, pant_size_waist INTEGER, pant_size_length INTEGER, shirt_size TEXT);'
 )
 
 cursor.execute(create_user_table)
