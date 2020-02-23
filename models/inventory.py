@@ -1,6 +1,6 @@
-import sqlite3
-from models.user import UserModel
-from models.purchase_history import PurchaseHistoryModel
+import sqlite3, sys
+# from . import user
+# import purchase_history
 
 class InventoryModel:
 
@@ -14,7 +14,7 @@ class InventoryModel:
         products = list()
         connection = sqlite3.connect('./db/pineapplestore.db')
         cursor = connection.cursor()
-        query = 'SELECT * FROM nventory WHERE product=?;'
+        query = 'SELECT * FROM inventory WHERE product=?;'
         result = cursor.execute(query, (product,))
         rows = result.fetchall()
         if rows:
@@ -42,7 +42,7 @@ class InventoryModel:
         connection = sqlite3.connect('./db/pineapplestore.db')
         cursor = connection.cursor()
         query = 'INSERT INTO inventory VALUES(NULL, ?, ?);'
-        result = cursor.execute(query, (product, price,))
+        cursor.execute(query, (product, price,))
         connection.commit()
         connection.close()
 
@@ -63,14 +63,14 @@ class ShoppingInventory:
 
     @classmethod
     def buy_product(cls, username, product):
-        user = UserModel.find_by_name(username)
+        # user = UserModel.find_by_name(username)
         if user:
             products = InventoryModel.find_by_product(product)
             if products:
                 connection = sqlite3.connect('./db/pineapplestore.db')
                 cursor = connection.cursor()
                 query = 'INSERT INTO purchase_history VALUES(NULL, ?, ?, ?);'
-                result = cursor.execute(query, (product, user.id, products[0].id,))
+                cursor.execute(query, (product, user.id, products[0].id,))
                 connection.commit()
                 connection.close()
                 return {'message': 'Selected product was bought!'}, 200
