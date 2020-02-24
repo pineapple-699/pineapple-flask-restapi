@@ -1,13 +1,20 @@
 import sqlite3, sys
-# from . import user
-# import purchase_history
+from models.user import UserModel
+from models.purchase_history import PurchaseHistoryModel
 
 class InventoryModel:
 
-    def __init__(self, id, product, price):
+    def __init__(self, id, sku, upc, rando, product, description, price, size, color, amt):
         self.id = id
+        self.sku = sku
+        self.upc = upc
+        self.rando = rando
         self.product = product
+        self.description = description
         self.price = price
+        self.size = size
+        self.color = color
+        self.amt = amt
 
     @classmethod
     def find_by_product(cls, product):
@@ -19,7 +26,8 @@ class InventoryModel:
         rows = result.fetchall()
         if rows:
             for row in rows:
-                products.append(InventoryModel(row[0], row[1], row[2]))
+                products.append(InventoryModel(row[0], row[1], row[2], row[3], 
+                    row[4], row[5], row[6], row[7], row[8], row[9]))
             return products
         connection.close()
 
@@ -33,7 +41,8 @@ class InventoryModel:
         rows = result.fetchall()
         if rows:
             for row in rows:
-                products.append(InventoryModel(row[0], row[1], row[2]))
+                products.append(InventoryModel(row[0], row[1], row[2], row[3], 
+                    row[4], row[5], row[6], row[7], row[8], row[9]))
             return products
         connection.close()
 
@@ -47,9 +56,17 @@ class InventoryModel:
         connection.close()
 
     def json(self):
-        return {'id': self.id,
-        'product': self.product,
-        'price': self.price
+        return {
+            'id': self.id,
+            'sku': self.sku,
+            'upc': self.upc,
+            'rando': self.rando,
+            'product': self.product,
+            'description': self.description,
+            'price': self.price,
+            'size': self.size,
+            'color': self.color,
+            'amt': self.amt
         }
 
 
@@ -63,7 +80,7 @@ class ShoppingInventory:
 
     @classmethod
     def buy_product(cls, username, product):
-        # user = UserModel.find_by_name(username)
+        user = UserModel.find_by_name(username)
         if user:
             products = InventoryModel.find_by_product(product)
             if products:
