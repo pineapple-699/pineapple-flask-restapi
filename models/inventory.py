@@ -15,6 +15,33 @@ class InventoryModel:
         self.size = size
         self.color = color
         self.amt = amt
+    
+    def get_sku(self):
+        return self.sku
+    
+    def get_upc(self):
+        return self.upc
+    
+    def get_rando(self):
+        return self.rando
+    
+    def get_product(self):
+        return self.product
+    
+    def get_description(self):
+        return self.description
+    
+    def get_price(self):
+        return self.price
+    
+    def get_size(self):
+        return self.size
+    
+    def get_color(self):
+        return self.color
+    
+    def get_amt(self):
+        return self.amt
 
     @classmethod
     def find_by_product(cls, product):
@@ -29,6 +56,18 @@ class InventoryModel:
                 products.append(InventoryModel(row[0], row[1], row[2], row[3], 
                     row[4], row[5], row[6], row[7], row[8], row[9]))
             return products
+        connection.close()
+
+    @classmethod
+    def find_by_id(cls, id):
+        connection = sqlite3.connect('./db/pineapplestore.db')
+        cursor = connection.cursor()
+        query = 'SELECT * FROM inventory WHERE id=?;'
+        result = cursor.execute(query, (id,))
+        row = result.fetchall()
+        if row:
+            return InventoryModel(row[0][0], row[0][1], row[0][2], row[0][3], 
+            row[0][4], row[0][5], row[0][6], row[0][7], row[0][8], row[0][9])
         connection.close()
 
     @classmethod
