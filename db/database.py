@@ -49,7 +49,7 @@ cursor.execute(create_cart_table)
 create_cart_item_table = '{}{}{}{}{}{}{}'.format(
     'CREATE TABLE IF NOT EXISTS',
     ' cart_item(id INTEGER PRIMARY KEY,',
-    ' quantity INTEGER, price FLOAT,',
+    ' quantity INTEGER,',
     ' product_id INTEGER NOT NULL,',
     ' cart_id INTEGER NOT NULL,',
     ' FOREIGN KEY (product_id) REFERENCES inventory(id)',
