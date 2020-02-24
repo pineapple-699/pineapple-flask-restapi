@@ -37,9 +37,9 @@ pip install -r requirements.txt
 ```
 
 ## Run
-Here are some quick commands to get started after install:
+Here are some quick commands to get started after install. Make sure to run them in the root directory
 
-- `python ./db/database.py`: Creates database and populates it with fake data
+- `rm db/pineapplestore.db && python db/database.py`: Creates database and populates it with fake data
 - `python app.py`: Run flask application
 
 ## Endpoints
