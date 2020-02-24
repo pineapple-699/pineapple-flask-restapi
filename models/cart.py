@@ -10,34 +10,38 @@ class CartModel:
         self.products = products
         self.total = total
     
-    def add_item(self, product_id, quantity):
+    def add_product(self, product_id, quantity):
+        # add a certain quantity of a certain product to cart 
         if product_id not in self.products.keys():
             self.products[product_id] = 0  
         self.products[product_id] += quantity
-        self.total += quantity * InventoryModel.find_by_id(product_id).get_price() 
+        self.total += quantity * InventoryModel.find_by_id(product_id).json()['price'] 
 
     def increment_product_amt(self, product_id):
+        # increment product amt by 1
         if product_id not in self.products.keys():
             self.products[product_id] = 0
         self.products[product_id] += 1
-        self.total += InventoryModel.find_by_id(product_id).get_price()
+        self.total += InventoryModel.find_by_id(product_id).json()['price']
     
     def remove_product(self, product_id):
         if product_id in self.products.keys():
             quantity = self.products[product_id]
             del self.products[product_id]
-            self.total -= quantity * InventoryModel.find_by_id(product_id).get_price()
+            self.total -= quantity * InventoryModel.find_by_id(product_id).json()['price']
     
     def decrement_product_amt(self, product_id):
+        # decrement product amt by 1
         if product_id in self.products.keys():
             quantity = self.products[product_id]
             if quantity > 1:
                 self.products[product_id] -= 1
                 if self.products[product_id] == 0:
                     del self.products[product_id]
-                self.total -= InventoryModel.find_by_id(product_id).get_price()
+                self.total -= InventoryModel.find_by_id(product_id).json()['price']
     
     def get_products(self):
+        # can be used to display product info in cart on the front end
         products = list()
         for product_id in self.products.keys():
             # append tuple - (product, amt in cart)

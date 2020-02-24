@@ -15,33 +15,6 @@ class InventoryModel:
         self.size = size
         self.color = color
         self.amt = amt
-    
-    def get_sku(self):
-        return self.sku
-    
-    def get_upc(self):
-        return self.upc
-    
-    def get_rando(self):
-        return self.rando
-    
-    def get_product(self):
-        return self.product
-    
-    def get_description(self):
-        return self.description
-    
-    def get_price(self):
-        return self.price
-    
-    def get_size(self):
-        return self.size
-    
-    def get_color(self):
-        return self.color
-    
-    def get_amt(self):
-        return self.amt
 
     @classmethod
     def find_by_product(cls, product):
