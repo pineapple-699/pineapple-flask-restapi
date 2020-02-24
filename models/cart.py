@@ -3,9 +3,9 @@ from models.user import UserModel
 from models.inventory import InventoryModel
 
 class CartModel:
-    def __init__(self, id, products, total):
-        # this should reference user id
+    def __init__(self, id, user_id, products, total):
         self.id = id
+        self.user_id = user_id
         #self.products is a dict - {product_id: amt in cart}
         self.products = products
         self.total = total
