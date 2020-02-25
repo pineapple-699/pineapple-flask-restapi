@@ -130,6 +130,6 @@ class CartModel:
         result = cursor.execute(query, (user_id,))
         row = result.fetchall()
         if row:
-            return CartModel.find_cart_by_id(row[0])
+            return CartModel.find_cart_by_id(row[0][0])
     
 
