@@ -122,4 +122,14 @@ class CartModel:
             connection.commit()
         connection.close()
     
+    @classmethod
+    def get_cart(cls, user_id):
+        connection = sqlite3.connect('./db/pineapplestore.db')
+        cursor = connection.cursor()
+        query = 'SELECT * FROM cart WHERE user_id=?;'
+        result = cursor.execute(query, (user_id,))
+        row = result.fetchall()
+        if row:
+            return CartModel.find_cart_by_id(row[0][0])
+    
 
