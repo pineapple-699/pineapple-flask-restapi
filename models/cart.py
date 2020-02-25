@@ -131,5 +131,8 @@ class CartModel:
         row = result.fetchall()
         if row:
             return CartModel.find_cart_by_id(row[0][0])
+
+        connection.commit()
+        connection.close()
     
 
