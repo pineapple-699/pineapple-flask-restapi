@@ -4,7 +4,7 @@ from models.purchase_history import PurchaseHistoryModel
 
 class InventoryModel:
 
-    def __init__(self, id, sku, upc, rando, product, description, price, size, color, amt):
+    def __init__(self, id, sku, upc, rando, product, description, price, size, color, amt, store):
         self.id = id
         self.sku = sku
         self.upc = upc
@@ -15,6 +15,7 @@ class InventoryModel:
         self.size = size
         self.color = color
         self.amt = amt
+        self.store = store
 
     @classmethod
     def find_by_product(cls, product):
@@ -27,7 +28,7 @@ class InventoryModel:
         if rows:
             for row in rows:
                 products.append(InventoryModel(row[0], row[1], row[2], row[3], 
-                    row[4], row[5], row[6], row[7], row[8], row[9]))
+                    row[4], row[5], row[6], row[7], row[8], row[9],row[10]))
             return products
         connection.close()
 
@@ -40,7 +41,7 @@ class InventoryModel:
         row = result.fetchall()
         if row:
             return InventoryModel(row[0][0], row[0][1], row[0][2], row[0][3], 
-            row[0][4], row[0][5], row[0][6], row[0][7], row[0][8], row[0][9])
+            row[0][4], row[0][5], row[0][6], row[0][7], row[0][8], row[0][9],row[0][10])
         connection.close()
 
     @classmethod
@@ -54,7 +55,7 @@ class InventoryModel:
         if rows:
             for row in rows:
                 products.append(InventoryModel(row[0], row[1], row[2], row[3], 
-                    row[4], row[5], row[6], row[7], row[8], row[9]))
+                    row[4], row[5], row[6], row[7], row[8], row[9],row[10]))
             return products
         connection.close()
 
@@ -78,7 +79,8 @@ class InventoryModel:
             'price': self.price,
             'size': self.size,
             'color': self.color,
-            'amt': self.amt
+            'amt': self.amt,
+            "store":self.store
         }
 
 
