@@ -34,40 +34,6 @@ class UserRegister(Resource):
                 type=str,
                 required=True,
                 help='This field is required!')
-        # parser.add_argument('username',
-        #                     type=str,
-        #                     required=True,
-        #                     help='This field is required!')
-
-        # parser.add_argument('password',
-        #                     type=str,
-        #                     required=True,
-        #                     help='This field is required!')
-        
-        # parser.add_argument('sex',
-        #                     type=str,
-        #                     required=True,
-        #                     help='This field is required!')
-        
-        # parser.add_argument('shoe_size',
-        #                     type=str,
-        #                     required=True,
-        #                     help='This field is required!')
-
-        # parser.add_argument('pant_size_waist',
-        #                     type=str,
-        #                     required=True,
-        #                     help='This field is required!')
-
-        # parser.add_argument('pant_size_length',
-        #                     type=str,
-        #                     required=True,
-        #                     help='This field is required!')
-        
-        # parser.add_argument('shirt_size',
-        #                     type=str,
-        #                     required=True,
-        #                     help='This field is required!')
 
         data_payload = parser.parse_args()
 
