@@ -28,21 +28,62 @@ class UserRegister(Resource):
 
     def post(self):
         parser = reqparse.RequestParser()
-        parser.add_argument('username',
-                            type=str,
-                            required=True,
-                            help='This field is required!')
+        arguments = ['username', 'password', 'sex', 'shoe_size', 'pant_size_waist', 'pant_size_length', 'shirt_size', 'shipping_address', 'billing_address']
+        for i in arguments:
+            parser.add_argument(i,
+                type=str,
+                required=True,
+                help='This field is required!')
+        # parser.add_argument('username',
+        #                     type=str,
+        #                     required=True,
+        #                     help='This field is required!')
 
-        parser.add_argument('password',
-                            type=str,
-                            required=True,
-                            help='This field is required!')
+        # parser.add_argument('password',
+        #                     type=str,
+        #                     required=True,
+        #                     help='This field is required!')
+        
+        # parser.add_argument('sex',
+        #                     type=str,
+        #                     required=True,
+        #                     help='This field is required!')
+        
+        # parser.add_argument('shoe_size',
+        #                     type=str,
+        #                     required=True,
+        #                     help='This field is required!')
+
+        # parser.add_argument('pant_size_waist',
+        #                     type=str,
+        #                     required=True,
+        #                     help='This field is required!')
+
+        # parser.add_argument('pant_size_length',
+        #                     type=str,
+        #                     required=True,
+        #                     help='This field is required!')
+        
+        # parser.add_argument('shirt_size',
+        #                     type=str,
+        #                     required=True,
+        #                     help='This field is required!')
 
         data_payload = parser.parse_args()
 
         if UserModel.find_by_name(data_payload['username']):
             return {'message': 'User with the same name already exists in database!'}, 400
         else:
-            UserModel.insert_into_table(data_payload['username'],
-                                        data_payload['password'])
+            arguments = ['username', 'password', 'sex', 'shoe_size', 'pant_size_waist', 'pant_size_length', 'shirt_size', 'shipping_address', 'billing_address']
+    
+            UserModel.insert_into_table(
+                data_payload['username'], 
+                data_payload['password'],
+                data_payload['sex'],
+                data_payload['shoe_size'],
+                data_payload['pant_size_waist'],
+                data_payload['pant_size_length'],
+                data_payload['shirt_size'],
+                data_payload['shipping_address'],
+                data_payload['billing_address'])
             return {'message': 'User successfully added to the database!'}, 201
