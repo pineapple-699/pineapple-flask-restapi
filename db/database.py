@@ -2,7 +2,7 @@ import sqlite3
 import csv
 import sys
 
-connection = sqlite3.connect("/Users/jalinparker/699-UCAD/pineapple-flask-restapi/db/pineapplestore.db")
+connection = sqlite3.connect("./db/pineapplestore.db")
 cursor = connection.cursor()
 create_user_table = '{}{}{}'.format(
     'CREATE TABLE IF NOT EXISTS',
@@ -26,7 +26,7 @@ create_inventory_table = '{}{}{}{}'.format(
     'CREATE TABLE IF NOT EXISTS',
     ' inventory(id INTEGER PRIMARY KEY, sku text, upc INTEGER,',
     ' rando text, product text, description text, price FLOAT,', 
-    ' size text, color text, amt INTEGER);'
+    ' size text, color text, amt INTEGER, store text);'
 )
 cursor.execute(create_inventory_table)
 
@@ -65,11 +65,11 @@ cursor.execute('INSERT OR REPLACE INTO user VALUES(4, "kangning_chen", "asdfg", 
 cursor.execute('INSERT OR REPLACE INTO user VALUES(5, "yunqi_qian", "qwerty", "Female", "12", "30","30","XL", "Ann Arbor", "MI");')
 cursor.execute('INSERT OR REPLACE INTO user VALUES(6, "tayloir_thompson", "aqwerva", "Female", "12", "30","30","XL", "Ann Arbor", "MI");')
 
-with open("/Users/jalinparker/699-UCAD/pineapple-flask-restapi/db/pineapple_inventory.csv", "rt") as f:
+with open("./db/pineapple_inventory.csv", "rt") as f:
     rows = csv.reader(f)
     next(rows) # Skip the header row.
     for row in rows:
-        query = "INSERT OR REPLACE INTO inventory VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+        query = "INSERT OR REPLACE INTO inventory VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
         cursor.execute(query, row)
 
 cursor.execute('INSERT OR REPLACE INTO purchase_history VALUES(1, "tshirt", 1, 1);')
@@ -93,19 +93,19 @@ create_billing_address_table = '{}{}{}{}{}'.format(
 cursor.execute(create_shipping_address_table)
 cursor.execute(create_billing_address_table)
 
-cursor.execute('INSERT OR REPLACE INTO shipping_address VALUES(1, "", "Hope Tambala", "123 Python St", "", "Ann Arbor", "MI", "48109");')
-cursor.execute('INSERT OR REPLACE INTO shipping_address VALUES(2, "", "Chance Murphy", "456 SQL St", "F", "Ann Arbor", "MI", "48104");')
-cursor.execute('INSERT OR REPLACE INTO shipping_address VALUES(3, "", "Jalin Parker", "789 Javascript St", "", "Ann Arbor", "MI", "48104");')
-cursor.execute('INSERT OR REPLACE INTO shipping_address VALUES(4, "", "Kangning Chen", "101 CPP St", "Apt. 3", "Ann Arbor", "MI", "48109");')
-cursor.execute('INSERT OR REPLACE INTO shipping_address VALUES(5, "", "Yunqi Qian", "112 Java St", "", "Ann Arbor", "MI", "48104");')
-cursor.execute('INSERT OR REPLACE INTO shipping_address VALUES(6, "", "Tayloir Thompson", "131 PHP St", "2A", "Ann Arbor", "MI", "48109");')
+cursor.execute('INSERT OR REPLACE INTO shipping_address VALUES(1, "hope_tambala", "Hope Tambala", "123 Python St", "", "Ann Arbor", "MI", "48109");')
+cursor.execute('INSERT OR REPLACE INTO shipping_address VALUES(2, "chance_murphy", "Chance Murphy", "456 SQL St", "F", "Ann Arbor", "MI", "48104");')
+cursor.execute('INSERT OR REPLACE INTO shipping_address VALUES(3, "jalin_parker", "Jalin Parker", "789 Javascript St", "", "Ann Arbor", "MI", "48104");')
+cursor.execute('INSERT OR REPLACE INTO shipping_address VALUES(4, "kangning_chen", "Kangning Chen", "101 CPP St", "Apt. 3", "Ann Arbor", "MI", "48109");')
+cursor.execute('INSERT OR REPLACE INTO shipping_address VALUES(5, "yunqi_qian", "Yunqi Qian", "112 Java St", "", "Ann Arbor", "MI", "48104");')
+cursor.execute('INSERT OR REPLACE INTO shipping_address VALUES(6, "tayloir_thompson", "Tayloir Thompson", "131 PHP St", "2A", "Ann Arbor", "MI", "48109");')
 
-cursor.execute('INSERT OR REPLACE INTO billing_address VALUES(1, "", "Hope Tambala", "345 Python St", "", "Ann Arbor", "MI", "48109");')
-cursor.execute('INSERT OR REPLACE INTO billing_address VALUES(2, "", "Chance Murphy", "678 SQL St", "F", "Ann Arbor", "MI", "48104");')
-cursor.execute('INSERT OR REPLACE INTO billing_address VALUES(3, "", "Jalin Parker", "910 Javascript St", "", "Ann Arbor", "MI", "48104");')
-cursor.execute('INSERT OR REPLACE INTO billing_address VALUES(4, "", "Kangning Chen", "112 CPP St", "Apt. 3", "Ann Arbor", "MI", "48109");')
-cursor.execute('INSERT OR REPLACE INTO billing_address VALUES(5, "", "Yunqi Qian", "131 Java St", "", "Ann Arbor", "MI", "48104");')
-cursor.execute('INSERT OR REPLACE INTO billing_address VALUES(6, "", "Tayloir Thompson", "415 PHP St", "2A", "Ann Arbor", "MI", "48109");')
+cursor.execute('INSERT OR REPLACE INTO billing_address VALUES(1, "hope_tambala", "Hope Tambala", "345 Python St", "", "Ann Arbor", "MI", "48109");')
+cursor.execute('INSERT OR REPLACE INTO billing_address VALUES(2, "chance_murphy", "Chance Murphy", "678 SQL St", "F", "Ann Arbor", "MI", "48104");')
+cursor.execute('INSERT OR REPLACE INTO billing_address VALUES(3, "jalin_parker", "Jalin Parker", "910 Javascript St", "", "Ann Arbor", "MI", "48104");')
+cursor.execute('INSERT OR REPLACE INTO billing_address VALUES(4, "kangning_chen", "Kangning Chen", "112 CPP St", "Apt. 3", "Ann Arbor", "MI", "48109");')
+cursor.execute('INSERT OR REPLACE INTO billing_address VALUES(5, "yunqi_qian", "Yunqi Qian", "131 Java St", "", "Ann Arbor", "MI", "48104");')
+cursor.execute('INSERT OR REPLACE INTO billing_address VALUES(6, "tayloir_thompson", "Tayloir Thompson", "415 PHP St", "2A", "Ann Arbor", "MI", "48109");')
 
 connection.commit()
 connection.close()

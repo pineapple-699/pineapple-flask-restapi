@@ -91,14 +91,14 @@ class CartModel:
         connection.close()
 
     @classmethod 
-    def find_cart_by_id(cls, id):
+    def find_cart_by_id(cls, cart_id):
         # construct a CartModel instance by cart id
         product_dict = {}
         total = 0
         connection = sqlite3.connect('./db/pineapplestore.db')
         cursor = connection.cursor()
-        query = 'SELECT * FROM cart_item WHERE id=?;'
-        result = cursor.execute(query, (id,))
+        query = 'SELECT * FROM cart_item WHERE cart_id=?;'
+        result = cursor.execute(query, (cart_id,))
         rows = result.fetchall()
         if rows:
             for row in rows:
@@ -131,5 +131,15 @@ class CartModel:
         row = result.fetchall()
         if row:
             return CartModel.find_cart_by_id(row[0][0])
+
+        connection.commit()
+        connection.close()
+
+    def json(self):
+        return {
+            'id': self.id,
+            'products': self.products,
+            'total': self.total
+        }
     
 
