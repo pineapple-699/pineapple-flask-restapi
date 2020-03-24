@@ -6,7 +6,7 @@ connection = sqlite3.connect("./db/pineapplestore.db")
 cursor = connection.cursor()
 create_user_table = '{}{}{}'.format(
     'CREATE TABLE IF NOT EXISTS',
-    ' user(id INTEGER PRIMARY KEY,',
+    ' user(id INTEGER PRIMARY KEY AUTOINCREMENT,',
     ' username text NOT NULL, password text NOT NULL, sex text, shoe_size FLOAT, pant_size_waist INTEGER, pant_size_length INTEGER, shirt_size TEXT, shipping_address text, billing_address text);'
 )
 
@@ -58,12 +58,12 @@ create_cart_item_table = '{}{}{}{}{}{}{}'.format(
 cursor.execute(create_cart_item_table)
 
 
-cursor.execute('INSERT OR REPLACE INTO user VALUES(1, "hope_tambala", "qwert", "Male", "12", "30","30","XL", "Ann Arbor", "MI");')
-cursor.execute('INSERT OR REPLACE INTO user VALUES(2, "chance_murphy", "qwaszx", "Male", "12", "30","30","XL", "Ann Arbor", "MI");')
-cursor.execute('INSERT OR REPLACE INTO user VALUES(3, "jalin_parker", "zxasqw", "Male", "12", "30","30","XL", "Ann Arbor", "MI");')
-cursor.execute('INSERT OR REPLACE INTO user VALUES(4, "kangning_chen", "asdfg", "Female", "12", "30","30","XL", "Ann Arbor", "MI");')
-cursor.execute('INSERT OR REPLACE INTO user VALUES(5, "yunqi_qian", "qwerty", "Female", "12", "30","30","XL", "Ann Arbor", "MI");')
-cursor.execute('INSERT OR REPLACE INTO user VALUES(6, "tayloir_thompson", "aqwerva", "Female", "12", "30","30","XL", "Ann Arbor", "MI");')
+cursor.execute('INSERT INTO user (username, password, sex, shoe_size, pant_size_waist, pant_size_length, shirt_size, shipping_address, billing_address) VALUES("hope_tambala", "qwert", "Male", "12", "30","30","XL", "Ann Arbor", "MI");')
+cursor.execute('INSERT INTO user (username, password, sex, shoe_size, pant_size_waist, pant_size_length, shirt_size, shipping_address, billing_address) VALUES("chance_murphy", "qwaszx", "Male", "12", "30","30","XL", "Ann Arbor", "MI");')
+cursor.execute('INSERT INTO user (username, password, sex, shoe_size, pant_size_waist, pant_size_length, shirt_size, shipping_address, billing_address) VALUES("jalin_parker", "zxasqw", "Male", "12", "30","30","XL", "Ann Arbor", "MI");')
+cursor.execute('INSERT OR REPLACE INTO user (username, password, sex, shoe_size, pant_size_waist, pant_size_length, shirt_size, shipping_address, billing_address) VALUES("kangning_chen", "asdfg", "Female", "12", "30","30","XL", "Ann Arbor", "MI");')
+cursor.execute('INSERT OR REPLACE INTO user (username, password, sex, shoe_size, pant_size_waist, pant_size_length, shirt_size, shipping_address, billing_address) VALUES("yunqi_qian", "qwerty", "Female", "12", "30","30","XL", "Ann Arbor", "MI");')
+cursor.execute('INSERT OR REPLACE INTO user (username, password, sex, shoe_size, pant_size_waist, pant_size_length, shirt_size, shipping_address, billing_address) VALUES("tayloir_thompson", "aqwerva", "Female", "12", "30","30","XL", "Ann Arbor", "MI");')
 
 with open("./db/pineapple_inventory.csv", "rt") as f:
     rows = csv.reader(f)
