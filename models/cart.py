@@ -1,6 +1,6 @@
 import sqlite3
 import datetime
-from models.inventory import InventoryModel
+from inventory import InventoryModel
 
 class CartModel:
 
@@ -36,6 +36,7 @@ class CartModel:
                 break 
         
     def remove_product(self, product_upc):
+        print("remove called")
         # remove a product
         for product in self.products:
             if product["product_info"]["upc"] == product_upc:
@@ -58,48 +59,59 @@ class CartModel:
                 else:
                     self.remove_product(product_upc)
                     break
+
     
     def update_product_size(self, product_upc, new_size):
         for product in self.products:
             if product["product_info"]["upc"] == product_upc:
                 quantity = product["quantity"]
-                break
-        if quantity:
-            self.remove_product(product_upc)
-            sku = InventoryModel.find_product_by_upc(product_upc).json()['sku']
-            new_upc = InventoryModel.find_upc_by_sku_size(sku, new_size).json()['upc']
-            self.add_product(new_upc, quantity)
+                print(f"quant is {quantity}")
+                current_color = InventoryModel.find_product_by_upc(product_upc).json()['color']
+                print("color is " + current_color)
+                product_index = self.products.index(product)
+                print(f"product index is {product_index}")
+                sku = InventoryModel.find_product_by_upc(product_upc).json()['sku']
+                product_info = InventoryModel.find_product_by_new_size(sku, current_color, new_size).json()
+                if product_info:
+                    self.remove_product(product_upc)
+                    self.products.insert(product_index, {"product_info": product_info, "quantity": quantity})
     
+
     def update_product_color(self, product_upc, new_color):
         for product in self.products:
             if product["product_info"]["upc"] == product_upc:
                 quantity = product["quantity"]
-                break
-        if quantity:
-            self.remove_product(product_upc)
-            sku = InventoryModel.find_product_by_upc(product_upc).json()['sku']
-            new_upc = InventoryModel.find_upc_by_sku_color(sku, new_color).json()['upc']
-            self.add_product(new_upc, quantity)
+                print(f"quant is {quantity}")
+                current_size = InventoryModel.find_product_by_upc(product_upc).json()['size']
+                print("size is " + current_size)
+                product_index = self.products.index(product)
+                print(f"product index is {product_index}")
+                sku = InventoryModel.find_product_by_upc(product_upc).json()['sku']
+                product_info = InventoryModel.find_product_by_new_color(sku, current_size, new_color).json()
+                if product_info:
+                    self.remove_product(product_upc)
+                    self.products.insert(product_index, {"product_info": product_info, "quantity": quantity})
+
 
     def save_cart_items_into_db(self):
         # method to update database
-        connection = sqlite3.connect('./db/pineapplestore.db')
+        connection = sqlite3.connect('../db/pineapplestore.db')
         cursor = connection.cursor()
         for product in self.products:
-            query = 'SELECT * FROM cart_item WHERE cart_id=? AND upc=?;'
+            query = 'SELECT * FROM cart_item WHERE cart_id=? AND product_upc=?;'
             result = cursor.execute(query, (self.id, product["product_info"]["upc"]))
             row = result.fetchall()
             if row:
                 # remove entry if quantity is 0
                 if product["quantity"] == 0:
-                    query = 'DELETE FROM cart_item WHERE cart_id=? AND upc=?'
+                    query = 'DELETE FROM cart_item WHERE cart_id=? AND product_upc=?'
                     cursor.execute(query, (self.id, product["product_info"]["upc"]))
                 else:
                     # update quantity if entry exists and quantity isn't 0
                     query = '{}{}{}'.format(
                         'UPDATE cart_item',
                         ' SET quantity=?',
-                        ' WHERE cart_id=? AND upc=?')
+                        ' WHERE cart_id=? AND product_upc=?')
                     cursor.execute(query, (product["quantity"], self.id, product["product_info"]["upc"]))
             else:
                 # make a new entry if no result
@@ -118,24 +130,26 @@ class CartModel:
     @classmethod 
     def construct_cart_by_cart_id(cls, cart_id):
         # construct a Cart instance by cart id
-        product_dict = {}
+        products = []
         total = 0
-        connection = sqlite3.connect('./db/pineapplestore.db')
+        connection = sqlite3.connect('../db/pineapplestore.db')
         cursor = connection.cursor()
         query = 'SELECT * FROM cart_item WHERE cart_id=?;'
         result = cursor.execute(query, (cart_id,))
         rows = result.fetchall()
         if rows:
             for row in rows:
-                # row[2] is product_id and row[1] is quantity
-                product_dict[row[2]] = row[1]
-                total += InventoryModel.find_by_id(row[2]).json()['price'] * row[1]
+                quantity = row[1]
+                product_upc = row[2]
+                product_info = InventoryModel.find_product_by_upc(product_upc).json()
+                products.append({"product_info": product_info, "quantity": quantity})
+                total += product_info["price"] * quantity
         connection.close()
-        return CartModel(id, product_dict, total)
+        return CartModel(cart_id, products, total)
     
     @classmethod
     def retrieve_cart_by_user_id(cls, user_id):
-        connection = sqlite3.connect('./db/pineapplestore.db')
+        connection = sqlite3.connect('../db/pineapplestore.db')
         cursor = connection.cursor()
         query = 'SELECT * FROM cart WHERE user_id=?;'
         result = cursor.execute(query, (user_id,))
@@ -155,30 +169,40 @@ class CartModel:
             row = result.fetchall()
             connection.close()
             return CartModel.construct_cart_by_cart_id(row[0][0])
+
+### methods for endpoint below
         
     @classmethod 
-    def add_product_for_user(user_id, product_upc, quantity):
+    def add_product_for_user(cls, user_id, product_upc, quantity):
         cart = CartModel.retrieve_cart_by_user_id(user_id)
         cart.add_product(product_upc, quantity)
     
     @classmethod
-    def remove_product_for_user(user_id, product_upc, quantity):
+    def remove_product_for_user(cls, user_id, product_upc, quantity):
         cart = CartModel.retrieve_cart_by_user_id(user_id)
         cart.remove_product(product_upc, quantity)
     
     @classmethod
-    def increment_product_amt_for_user(user_id, product_upc, quantity):
+    def increment_product_amt_for_user(cls, user_id, product_upc, quantity):
         cart = CartModel.retrieve_cart_by_user_id(user_id)
         cart.increment_product_amt(product_upc, quantity)
     
     @classmethod
-    def decrement_product_amt_for_user(user_id, product_upc, quantity):
+    def decrement_product_amt_for_user(cls, user_id, product_upc, quantity):
         cart = CartModel.retrieve_cart_by_user_id(user_id)
         cart.decrement_product_amt(product_upc, quantity)
 
     @classmethod
-    def retrieve_products_in_cart_for_user(user_id):
+    def retrieve_products_in_cart_for_user(cls, user_id):
         cart = CartModel.retrieve_cart_by_user_id(user_id) 
         return cart.json()
-    
+
+
+
+
+cart = CartModel.retrieve_cart_by_user_id(1)
+cart.add_product(1468826073, 2)
+cart.add_product(7281589674, 3)
+cart.update_product_size(111, "M")
+print(cart.json())
 
