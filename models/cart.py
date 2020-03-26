@@ -1,6 +1,6 @@
 import sqlite3
 import datetime
-from inventory import InventoryModel
+from models.inventory import InventoryModel
 
 class CartModel:
 
@@ -92,7 +92,7 @@ class CartModel:
 
 
     def update_product_in_db(self, old_product_upc, new_product_upc, quantity):
-        connection = sqlite3.connect('../db/pineapplestore.db')
+        connection = sqlite3.connect('./db/pineapplestore.db')
         cursor = connection.cursor()
         query = '{}{}{}'.format(
             'UPDATE cart_item',
@@ -104,7 +104,7 @@ class CartModel:
 
     def save_cart_items_into_db(self):
         # method to update database
-        connection = sqlite3.connect('../db/pineapplestore.db')
+        connection = sqlite3.connect('./db/pineapplestore.db')
         cursor = connection.cursor()
         for product in self.products:
             query = 'SELECT * FROM cart_item WHERE cart_id=? AND product_upc=?;'
@@ -141,7 +141,7 @@ class CartModel:
         # construct a Cart instance by cart id
         products = []
         total = 0
-        connection = sqlite3.connect('../db/pineapplestore.db')
+        connection = sqlite3.connect('./db/pineapplestore.db')
         cursor = connection.cursor()
         query = 'SELECT * FROM cart_item WHERE cart_id=?;'
         result = cursor.execute(query, (cart_id,))
@@ -158,7 +158,7 @@ class CartModel:
     
     @classmethod
     def retrieve_cart_by_user_id(cls, user_id):
-        connection = sqlite3.connect('../db/pineapplestore.db')
+        connection = sqlite3.connect('./db/pineapplestore.db')
         cursor = connection.cursor()
         query = 'SELECT * FROM cart WHERE user_id=?;'
         result = cursor.execute(query, (user_id,))
@@ -216,7 +216,6 @@ class CartModel:
         cart.update_product_color(product_upc, new_color)
         return cart.json()
 
-
     @classmethod
     def retrieve_products_in_cart_for_user(cls, user_id):
         cart = CartModel.retrieve_cart_by_user_id(user_id) 
@@ -225,12 +224,4 @@ class CartModel:
 
 
 
-# cart = CartModel.retrieve_cart_by_user_id(3)
-# # cart.add_product(1468826073, 2)
-# # cart.add_product(7281589674, 3)
-# # cart.add_product(1185411455, 1)
-# # cart.remove_product(7281589674)
-# cart.update_product_size(1468826073, "S")
-
-# print(cart.json())
 

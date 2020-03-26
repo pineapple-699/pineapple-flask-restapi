@@ -12,36 +12,25 @@ class Cart(Resource):
                             help='This field is mandatory!')
 
         data_payload = parser.parse_args()
-        cart = CartModel.get_cart(data_payload['user_id'])
+        cart = CartModel.retrieve_cart_by_user_id(data_payload['user_id'])
         if cart:
             return {
-                'cart': cart.json
+                'cart': cart.json()
             }, 200
         else:
             return {'message': 'Cart not found!'}, 404
 
-    def post(self, cart_id, user_id):
+
+class CartItem(Resource):
+    def post(self, user_id, cart_id):
+        
         parser = reqparse.RequestParser()
         parser.add_argument('user_id',
                             type=int,
                             required=True,
                             help='This field is mandatory!')
 
-        data_payload = parser.parse_args()
-
-        CartModel.add_cart(data_payload['user_id'])
-        return {'message': 'Cart successfully added to database!'}, 201
-
-class CartItem(Resource):
-    def post(self, user_id, cart_id):
-        
-        parser = reqparse.RequestParser()
-        parser.add_argument('cart_id',
-                            type=int,
-                            required=True,
-                            help='This field is mandatory!')
-
-        parser.add_argument('product_id',
+        parser.add_argument('product_upc',
                             type=int,
                             required=True,
                             help='This field is mandatory!')
@@ -52,14 +41,14 @@ class CartItem(Resource):
                             help='This field is mandatory!')
 
         data_payload = parser.parse_args()
-        cart = CartModel.get_cart(data_payload['user_id'])
+        cart = CartModel.retrieve_cart_by_user_id(data_payload['user_id'])
 
         if (data_payload['type'] =='add_product'):
-            cart.add_product(data_payload['product_id'], data_payload['quanity'])
+            cart.add_product(data_payload['product_upc'], data_payload['quanity'])
             return {'message': 'Cart Item successfully added to database!'}, 201
             
         if (data_payload['type'] =='remove_product'):
-            cart.remove_product(data_payload['product_id'])
+            cart.remove_product(data_payload['product_upc'])
             return {'message': 'Cart Item successfully removed from database!'}, 201
 
 
@@ -89,7 +78,7 @@ class CartItemQuanity(Resource):
 
         data_payload = parser.parse_args()
 
-        cart = CartModel.get_cart(data_payload['user_id'])
+        cart = CartModel.retrieve_cart_by_user_id(data_payload['user_id'])
 
         if (data_payload['type'] =='increment'):
             cart.increment_product_amt(data_payload['product_id'])

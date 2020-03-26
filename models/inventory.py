@@ -1,6 +1,6 @@
 import sqlite3, sys
-from user import UserModel
-from purchase_history import PurchaseHistoryModel
+from models.user import UserModel
+from models.purchase_history import PurchaseHistoryModel
 
 class InventoryModel:
 
@@ -46,7 +46,7 @@ class InventoryModel:
 
     @classmethod
     def find_product_by_upc(cls, upc):
-        connection = sqlite3.connect('../db/pineapplestore.db')
+        connection = sqlite3.connect('./db/pineapplestore.db')
         cursor = connection.cursor()
         query = 'SELECT * FROM inventory WHERE upc=?;'
         result = cursor.execute(query, (upc,))
@@ -58,7 +58,7 @@ class InventoryModel:
     
     @classmethod
     def find_product_by_new_size(cls, sku, color, new_size):
-        connection = sqlite3.connect('../db/pineapplestore.db')
+        connection = sqlite3.connect('./db/pineapplestore.db')
         cursor = connection.cursor()
         query = 'SELECT * FROM inventory WHERE sku=? and color=? and size=?;'
         result = cursor.execute(query, (sku, color, new_size))
@@ -70,7 +70,7 @@ class InventoryModel:
     
     @classmethod
     def find_product_by_new_color(cls, sku, size, new_color):
-        connection = sqlite3.connect('../db/pineapplestore.db')
+        connection = sqlite3.connect('./db/pineapplestore.db')
         cursor = connection.cursor()
         query = 'SELECT * FROM inventory WHERE sku=? and size=? and color=?;'
         result = cursor.execute(query, (sku, size, new_color))

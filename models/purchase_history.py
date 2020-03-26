@@ -1,5 +1,5 @@
 import sqlite3
-from user import UserModel
+from models.user import UserModel
 
 
 class PurchaseHistoryModel:
