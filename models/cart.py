@@ -65,32 +65,32 @@ class CartModel:
         for product in self.products:
             if product["product_info"]["upc"] == product_upc:
                 quantity = product["quantity"]
-                print(f"quant is {quantity}")
                 current_color = InventoryModel.find_product_by_upc(product_upc).json()['color']
-                print("color is " + current_color)
                 product_index = self.products.index(product)
-                print(f"product index is {product_index}")
                 sku = InventoryModel.find_product_by_upc(product_upc).json()['sku']
                 product_info = InventoryModel.find_product_by_new_size(sku, current_color, new_size).json()
                 if product_info:
                     self.remove_product(product_upc)
-                    self.products.insert(product_index, {"product_info": product_info, "quantity": quantity})
+                    self.insert_product_at_index(product_index, product_info, quantity)
     
 
     def update_product_color(self, product_upc, new_color):
         for product in self.products:
             if product["product_info"]["upc"] == product_upc:
                 quantity = product["quantity"]
-                print(f"quant is {quantity}")
                 current_size = InventoryModel.find_product_by_upc(product_upc).json()['size']
-                print("size is " + current_size)
                 product_index = self.products.index(product)
-                print(f"product index is {product_index}")
                 sku = InventoryModel.find_product_by_upc(product_upc).json()['sku']
                 product_info = InventoryModel.find_product_by_new_color(sku, current_size, new_color).json()
                 if product_info:
                     self.remove_product(product_upc)
-                    self.products.insert(product_index, {"product_info": product_info, "quantity": quantity})
+                    self.insert_product_at_index(product_index, product_info, quantity)
+
+
+    def insert_product_at_index(self, product_index, product_info, quantity):
+        self.products.insert(product_index, {"product_info": product_info, "quantity": quantity})
+        self.save_cart_items_into_db()
+        self.total += quantity * InventoryModel.find_product_by_upc(product_info['upc']).json()['price']
 
 
     def save_cart_items_into_db(self):
@@ -200,9 +200,12 @@ class CartModel:
 
 
 
-cart = CartModel.retrieve_cart_by_user_id(1)
-cart.add_product(1468826073, 2)
-cart.add_product(7281589674, 3)
-cart.update_product_size(111, "M")
-print(cart.json())
+# cart = CartModel.retrieve_cart_by_user_id(3)
+# cart.add_product(1468826073, 2)
+# cart.add_product(7281589674, 3)
+# cart.add_product(1185411455, 1)
+# cart.remove_product(7281589674)
+# cart.update_product_size(7281589674, "L")
+
+# print(cart.json())
 
