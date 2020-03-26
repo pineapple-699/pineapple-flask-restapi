@@ -110,7 +110,7 @@ class AddressModel:
         self.zipcode = zipcode
 
     @classmethod
-    def get_default_billing(self, cls, city, db_path='./db/pineapplestore.db'):
+    def get_default_billing(self, cls, db_path='./db/pineapplestore.db'):
         users = list()
         connection = sqlite3.connect(db_path)
         cursor = connection.cursor()
@@ -124,7 +124,7 @@ class AddressModel:
         connection.close()
     
     @classmethod
-    def get_default_shipping(self, cls, city, db_path='./db/pineapplestore.db'):
+    def get_default_shipping(self, cls, db_path='./db/pineapplestore.db'):
         users = list()
         connection = sqlite3.connect(db_path)
         cursor = connection.cursor()
@@ -137,14 +137,23 @@ class AddressModel:
             return users
         connection.close()
 
-    def insert_into_table(self, cls, shipping_address, billing_address, db_path='./db/pineapplestore.db'):
+    @classmethod
+    def insert_shipping(self, cls, shipping_address, db_path='./db/pineapplestore.db'):
         connection = sqlite3.connect(db_path)
         cursor = connection.cursor()
-        query = 'INSERT INTO user VALUES(NULL, NULL, NULL, NULL,NULL,NULL,NULL,?,?)'
-        cursor.execute(query, (shipping_address, billing_address))
+        query = 'INSERT INTO user VALUES(NULL, NULL, NULL, NULL,NULL,NULL,NULL,?,NULL)'
+        cursor.execute(query, (shipping_address))
         connection.commit()
         connection.close()
 
+    @classmethod
+    def insert_billing(self, cls, billing_address, db_path='./db/pineapplestore.db'):
+        connection = sqlite3.connect(db_path)
+        cursor = connection.cursor()
+        query = 'INSERT INTO user VALUES(NULL, NULL, NULL, NULL,NULL,NULL,NULL,NULL,?)'
+        cursor.execute(query, (billing_address))
+        connection.commit()
+        connection.close()
     def json(self):
         return {
             'id': self.id,

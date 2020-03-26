@@ -1,4 +1,4 @@
-from models.user import UserModel
+from models.user import UserModel, AddressModel
 from flask_restful import Resource, reqparse
 from flask_jwt import jwt_required
 
@@ -46,3 +46,37 @@ class UserRegister(Resource):
             UserModel.insert_into_table(data_payload['username'],
                                         data_payload['password'])
             return {'message': 'User successfully added to the database!'}, 201
+
+class ShippingRegister(Resource):
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('username',
+                            type=str,
+                            required=True,
+                            help='This field is required!')
+
+        data_payload = parser.parse_args()
+
+        if AddressModel.get_default_shipping(data_payload['username']):
+            return {'message': 'User with the same address already exists in database!'}, 400
+        else:
+            AddressModel.insert_shipping(data_payload['username'],
+            data_payload['shipping_address'])
+            return {'message': 'Shipping address successfully added to the database!'}, 201
+
+class BillingRegister(Resource):
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('username',
+                            type=str,
+                            required=True,
+                            help='This field is required!')
+
+        data_payload = parser.parse_args()
+
+        if AddressModel.get_default_shipping(data_payload['username']):
+            return {'message': 'User with the same address already exists in database!'}, 400
+        else:
+            AddressModel.insert_billing(data_payload['username'],
+            data_payload['billing_address'])
+            return {'message': 'Billing address successfully added to the database!'}, 201
