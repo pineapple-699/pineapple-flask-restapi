@@ -45,6 +45,42 @@ class InventoryModel:
         connection.close()
 
     @classmethod
+    def find_product_by_upc(cls, upc):
+        connection = sqlite3.connect('./db/pineapplestore.db')
+        cursor = connection.cursor()
+        query = 'SELECT * FROM inventory WHERE upc=?;'
+        result = cursor.execute(query, (upc,))
+        row = result.fetchall()
+        if row:
+            return InventoryModel(row[0][0], row[0][1], row[0][2], row[0][3], 
+            row[0][4], row[0][5], row[0][6], row[0][7], row[0][8], row[0][9], row[0][10])
+        connection.close()
+    
+    @classmethod
+    def find_product_by_new_size(cls, sku, color, new_size):
+        connection = sqlite3.connect('./db/pineapplestore.db')
+        cursor = connection.cursor()
+        query = 'SELECT * FROM inventory WHERE sku=? and color=? and size=?;'
+        result = cursor.execute(query, (sku, color, new_size))
+        row = result.fetchall()
+        if row:
+            return InventoryModel(row[0][0], row[0][1], row[0][2], row[0][3], 
+            row[0][4], row[0][5], row[0][6], row[0][7], row[0][8], row[0][9], row[0][10])
+        connection.close()
+    
+    @classmethod
+    def find_product_by_new_color(cls, sku, size, new_color):
+        connection = sqlite3.connect('./db/pineapplestore.db')
+        cursor = connection.cursor()
+        query = 'SELECT * FROM inventory WHERE sku=? and size=? and color=?;'
+        result = cursor.execute(query, (sku, size, new_color))
+        row = result.fetchall()
+        if row:
+            return InventoryModel(row[0][0], row[0][1], row[0][2], row[0][3], 
+            row[0][4], row[0][5], row[0][6], row[0][7], row[0][8], row[0][9], row[0][10])
+        connection.close()
+
+    @classmethod
     def find_all_products(cls):
         products = list()
         connection = sqlite3.connect('./db/pineapplestore.db')
