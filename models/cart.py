@@ -70,8 +70,10 @@ class CartModel:
                 sku = InventoryModel.find_product_by_upc(product_upc).json()['sku']
                 product_info = InventoryModel.find_product_by_new_size(sku, current_color, new_size).json()
                 if product_info:
-                    self.remove_product(product_upc)
-                    self.insert_product_at_index(product_index, product_info, quantity)
+                    self.products.remove(product)
+                    self.products.insert(product_index, {"product_info": product_info, "quantity": quantity})
+                    self.update_product_in_db(product_upc, product_info["upc"], quantity)
+                    self.total += quantity * InventoryModel.find_product_by_upc(product_info['upc']).json()['price']
     
 
     def update_product_color(self, product_upc, new_color):
@@ -83,14 +85,21 @@ class CartModel:
                 sku = InventoryModel.find_product_by_upc(product_upc).json()['sku']
                 product_info = InventoryModel.find_product_by_new_color(sku, current_size, new_color).json()
                 if product_info:
-                    self.remove_product(product_upc)
-                    self.insert_product_at_index(product_index, product_info, quantity)
+                    self.products.remove(product)
+                    self.products.insert(product_index, {"product_info": product_info, "quantity": quantity})
+                    self.update_product_in_db(product_upc, product_info["upc"], quantity)
+                    self.total += quantity * InventoryModel.find_product_by_upc(product_info['upc']).json()['price']
 
 
-    def insert_product_at_index(self, product_index, product_info, quantity):
-        self.products.insert(product_index, {"product_info": product_info, "quantity": quantity})
-        self.save_cart_items_into_db()
-        self.total += quantity * InventoryModel.find_product_by_upc(product_info['upc']).json()['price']
+    def update_product_in_db(self, old_product_upc, new_product_upc, quantity):
+        connection = sqlite3.connect('../db/pineapplestore.db')
+        cursor = connection.cursor()
+        query = '{}{}{}'.format(
+            'UPDATE cart_item',
+            ' SET product_upc=?',
+            ' WHERE product_upc=?')
+        cursor.execute(query, (new_product_upc, old_product_upc))
+
 
 
     def save_cart_items_into_db(self):
@@ -181,16 +190,32 @@ class CartModel:
     def remove_product_for_user(cls, user_id, product_upc, quantity):
         cart = CartModel.retrieve_cart_by_user_id(user_id)
         cart.remove_product(product_upc, quantity)
+        return cart.json()
     
     @classmethod
     def increment_product_amt_for_user(cls, user_id, product_upc, quantity):
         cart = CartModel.retrieve_cart_by_user_id(user_id)
         cart.increment_product_amt(product_upc, quantity)
+        return cart.json()
     
     @classmethod
     def decrement_product_amt_for_user(cls, user_id, product_upc, quantity):
         cart = CartModel.retrieve_cart_by_user_id(user_id)
         cart.decrement_product_amt(product_upc, quantity)
+        return cart.json()
+    
+    @classmethod
+    def update_product_size_for_user(cls, user_id, product_upc, new_size):
+        cart = CartModel.retrieve_cart_by_user_id(user_id)
+        cart.update_product_size(product_upc, new_size)
+        return cart.json()
+    
+    @classmethod
+    def update_product_color_for_user(cls, user_id, product_upc, new_color):
+        cart = CartModel.retrieve_cart_by_user_id(user_id)
+        cart.update_product_color(product_upc, new_color)
+        return cart.json()
+
 
     @classmethod
     def retrieve_products_in_cart_for_user(cls, user_id):
@@ -201,11 +226,11 @@ class CartModel:
 
 
 # cart = CartModel.retrieve_cart_by_user_id(3)
-# cart.add_product(1468826073, 2)
-# cart.add_product(7281589674, 3)
-# cart.add_product(1185411455, 1)
-# cart.remove_product(7281589674)
-# cart.update_product_size(7281589674, "L")
+# # cart.add_product(1468826073, 2)
+# # cart.add_product(7281589674, 3)
+# # cart.add_product(1185411455, 1)
+# # cart.remove_product(7281589674)
+# cart.update_product_size(1468826073, "S")
 
 # print(cart.json())
 
