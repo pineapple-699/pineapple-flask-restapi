@@ -34,7 +34,7 @@ api.add_resource(Inventory, '/product/<string:product>')
 api.add_resource(InventoryProductList, '/products')
 api.add_resource(PurchaseHistory, '/history/<string:name>')
 api.add_resource(Shopping, '/shopping')
-api.add_resource(Cart, '/cart')
+api.add_resource(Cart, '/cart/<string:userid>')
 
 
 
