@@ -187,21 +187,21 @@ class CartModel:
         cart.add_product(product_upc, quantity)
     
     @classmethod
-    def remove_product_for_user(cls, user_id, product_upc, quantity):
+    def remove_product_for_user(cls, user_id, product_upc):
         cart = CartModel.retrieve_cart_by_user_id(user_id)
-        cart.remove_product(product_upc, quantity)
+        cart.remove_product(product_upc)
         return cart.json()
     
     @classmethod
-    def increment_product_amt_for_user(cls, user_id, product_upc, quantity):
+    def increment_product_amt_for_user(cls, user_id, product_upc):
         cart = CartModel.retrieve_cart_by_user_id(user_id)
-        cart.increment_product_amt(product_upc, quantity)
+        cart.increment_product_amt(product_upc)
         return cart.json()
     
     @classmethod
-    def decrement_product_amt_for_user(cls, user_id, product_upc, quantity):
+    def decrement_product_amt_for_user(cls, user_id, product_upc):
         cart = CartModel.retrieve_cart_by_user_id(user_id)
-        cart.decrement_product_amt(product_upc, quantity)
+        cart.decrement_product_amt(product_upc)
         return cart.json()
     
     @classmethod
@@ -220,8 +220,5 @@ class CartModel:
     def retrieve_products_in_cart_for_user(cls, user_id):
         cart = CartModel.retrieve_cart_by_user_id(user_id) 
         return cart.json()
-
-
-
 
 

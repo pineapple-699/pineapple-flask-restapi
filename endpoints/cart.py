@@ -22,11 +22,19 @@ class Cart(Resource):
                             help='This field is mandatory!')
         parser.add_argument('quantity',
                             type=int,
-                            required=True,
-                            help='This field is mandatory!')
+                            required=False,
+                            help='This field is necessary only when adding product.')
+        parser.add_argument('new_size',
+                            type=int,
+                            required=False,
+                            help='This field is necessary only when changing product size.')
+        parser.add_argument('new_color',
+                            type=int,
+                            required=False,
+                            help='This field is necessary only when changing product color.')
         parser.add_argument('type',
                             type=str,
-                            required=True,
+                            required=False,
                             help='This field is mandatory!')
 
         data_payload = parser.parse_args()
@@ -39,19 +47,31 @@ class Cart(Resource):
         
         if data_payload['type'] == 'remove_product_for_user':
             CartModel.remove_product_for_user(userid,
-                                data_payload['product_upc'],
-                                data_payload['quantity'])
+                                data_payload['product_upc'])
             return {'message': 'Product successfully removed from database!'}, 201
+
         if data_payload['type'] == 'increment_product_amt_for_user':
             CartModel.increment_product_amt_for_user(userid,
-                                data_payload['product_upc'],
-                                data_payload['quantity'])
-            return {'message': 'Product successfully updated in database!'}, 201
+                                data_payload['product_upc'])
+            return {'message': 'Product amt successfully updated in database!'}, 201
+
         if data_payload['type'] == 'decrement_product_amt_for_user':
             CartModel.decrement_product_amt_for_user(userid,
+                                data_payload['product_upc'])
+            return {'message': 'Product amt successfully updated in database!'}, 201
+
+        if data_payload['type'] == 'update_product_size_for_user':
+            CartModel.update_product_size_for_user(userid,
                                 data_payload['product_upc'],
-                                data_payload['quanity'])
-            return {'message': 'Product successfully updated in database!'}, 201
+                                data_payload['new_size'])
+            return {'message': 'Product size successfully updated in database!'}, 201
+
+        if data_payload['type'] == 'update_product_color_for_user':
+            CartModel.update_product_color_for_user(userid,
+                                data_payload['product_upc'],
+                                data_payload['new_color'])
+            return {'message': 'Product color successfully updated in database!'}, 201
 
         else:
-            return {'message': 'Womp, you typed in the type wrong'}, 201        
+            return {'message': 'Womp, you typed in the type wrong'}, 201   
+
