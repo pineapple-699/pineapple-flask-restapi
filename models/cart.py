@@ -97,7 +97,7 @@ class CartModel:
         query = '{}{}{}'.format(
             'UPDATE cart_item',
             ' SET product_upc=?',
-            ' WHERE cart_id=? product_upc=?')
+            ' WHERE cart_id=? AND product_upc=?')
         cursor.execute(query, (new_product_upc, self.id, old_product_upc))
 
 
