@@ -37,7 +37,7 @@ class Inventory(Resource):
 class InventoryProductList(Resource):
 
     def get(self):
-        products = InventoryModel.find_all_products();
+        products = InventoryModel.find_all_products()
         if products:
             return {'products': [product.json() for product in products]}, 200
         else:
