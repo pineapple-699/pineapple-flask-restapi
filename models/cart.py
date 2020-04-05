@@ -72,7 +72,7 @@ class CartModel:
                 if product_info:
                     self.products.remove(product)
                     self.products.insert(product_index, {"product_info": product_info, "quantity": quantity})
-                    self.update_product_in_db(product_upc, product_info["upc"], quantity)
+                    self.update_product_in_db(product_upc, product_info["upc"])
                     self.total += quantity * InventoryModel.find_product_by_upc(product_info['upc']).json()['price']
     
 
@@ -87,19 +87,18 @@ class CartModel:
                 if product_info:
                     self.products.remove(product)
                     self.products.insert(product_index, {"product_info": product_info, "quantity": quantity})
-                    self.update_product_in_db(product_upc, product_info["upc"], quantity)
+                    self.update_product_in_db(product_upc, product_info["upc"])
                     self.total += quantity * InventoryModel.find_product_by_upc(product_info['upc']).json()['price']
 
 
-    def update_product_in_db(self, old_product_upc, new_product_upc, quantity):
+    def update_product_in_db(self, old_product_upc, new_product_upc):
         connection = sqlite3.connect('./db/pineapplestore.db')
         cursor = connection.cursor()
         query = '{}{}{}'.format(
             'UPDATE cart_item',
             ' SET product_upc=?',
-            ' WHERE product_upc=?')
-        cursor.execute(query, (new_product_upc, old_product_upc))
-
+            ' WHERE cart_id=? product_upc=?')
+        cursor.execute(query, (new_product_upc, self.id, old_product_upc))
 
 
     def save_cart_items_into_db(self):
