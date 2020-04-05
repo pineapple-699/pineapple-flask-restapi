@@ -89,6 +89,13 @@ class CartModel:
                     self.products.insert(product_index, {"product_info": product_info, "quantity": quantity})
                     self.update_product_in_db(product_upc, product_info["upc"])
                     self.total += quantity * InventoryModel.find_product_by_upc(product_info['upc']).json()['price']
+    
+    def update_product_quantity(self, product_upc, new_quantity):
+        for product in self.products:
+            if product["product_info"]["upc"] == product_upc:
+                product["quantity"] = new_quantity
+                self.save_cart_items_into_db()
+                break      
 
 
     def update_product_in_db(self, old_product_upc, new_product_upc):
@@ -213,6 +220,12 @@ class CartModel:
     def update_product_color_for_user(cls, user_id, product_upc, new_color):
         cart = CartModel.retrieve_cart_by_user_id(user_id)
         cart.update_product_color(product_upc, new_color)
+        return cart.json()
+
+    @classmethod
+    def update_product_quantity_for_user(cls, user_id, product_upc, new_quantity):
+        cart = CartModel.retrieve_cart_by_user_id(user_id)
+        cart.update_product_quantity(product_upc, new_quantity)
         return cart.json()
 
     @classmethod

@@ -23,7 +23,7 @@ class Cart(Resource):
         parser.add_argument('quantity',
                             type=int,
                             required=False,
-                            help='This field is necessary only when adding product.')
+                            help='This field is necessary only when adding product and updating product quantity.')
         parser.add_argument('new_size',
                             type=int,
                             required=False,
@@ -71,6 +71,12 @@ class Cart(Resource):
                                 data_payload['product_upc'],
                                 data_payload['new_color'])
             return {'message': 'Product color successfully updated in database!'}, 201
+
+        if data_payload['type'] == 'update_product_quantity_for_user':
+            CartModel.update_product_quantity_for_user(userid,
+                                data_payload['product_upc'],
+                                data_payload['quantity'])
+            return {'message': 'Product quantity successfully updated in database!'}, 201
 
         else:
             return {'message': 'Womp, you typed in the type wrong'}, 201   
