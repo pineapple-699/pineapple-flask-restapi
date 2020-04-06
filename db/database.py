@@ -26,7 +26,7 @@ create_inventory_table = '{}{}{}{}'.format(
     'CREATE TABLE IF NOT EXISTS',
     ' inventory(id INTEGER PRIMARY KEY, sku text, upc INTEGER,',
     ' rando text, product text, description text, price FLOAT,', 
-    ' size text, color text, amt INTEGER, store text);'
+    ' size text, color text, amt INTEGER, store text, picture text);'
 )
 cursor.execute(create_inventory_table)
 
@@ -69,7 +69,7 @@ with open("./db/pineapple_inventory.csv", "rt") as f:
     rows = csv.reader(f)
     next(rows) # Skip the header row.
     for row in rows:
-        query = "INSERT OR REPLACE INTO inventory VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+        query = "INSERT OR REPLACE INTO inventory VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
         cursor.execute(query, row)
 
 cursor.execute('INSERT OR REPLACE INTO purchase_history VALUES(1, "tshirt", 1, 1);')
