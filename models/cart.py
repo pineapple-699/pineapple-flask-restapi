@@ -72,7 +72,7 @@ class CartModel:
                 if product_info:
                     self.products.remove(product)
                     self.products.insert(product_index, {"product_info": product_info, "quantity": quantity})
-                    self.update_product_in_db(product_upc, product_info["upc"], quantity)
+                    self.update_product_in_db(product_upc, product_info["upc"])
                     self.total += quantity * InventoryModel.find_product_by_upc(product_info['upc']).json()['price']
     
 
@@ -87,19 +87,25 @@ class CartModel:
                 if product_info:
                     self.products.remove(product)
                     self.products.insert(product_index, {"product_info": product_info, "quantity": quantity})
-                    self.update_product_in_db(product_upc, product_info["upc"], quantity)
+                    self.update_product_in_db(product_upc, product_info["upc"])
                     self.total += quantity * InventoryModel.find_product_by_upc(product_info['upc']).json()['price']
+    
+    def update_product_quantity(self, product_upc, new_quantity):
+        for product in self.products:
+            if product["product_info"]["upc"] == product_upc:
+                product["quantity"] = new_quantity
+                self.save_cart_items_into_db()
+                break      
 
 
-    def update_product_in_db(self, old_product_upc, new_product_upc, quantity):
+    def update_product_in_db(self, old_product_upc, new_product_upc):
         connection = sqlite3.connect('./db/pineapplestore.db')
         cursor = connection.cursor()
         query = '{}{}{}'.format(
             'UPDATE cart_item',
             ' SET product_upc=?',
-            ' WHERE product_upc=?')
-        cursor.execute(query, (new_product_upc, old_product_upc))
-
+            ' WHERE cart_id=? AND product_upc=?')
+        cursor.execute(query, (new_product_upc, self.id, old_product_upc))
 
 
     def save_cart_items_into_db(self):
@@ -187,21 +193,21 @@ class CartModel:
         cart.add_product(product_upc, quantity)
     
     @classmethod
-    def remove_product_for_user(cls, user_id, product_upc, quantity):
+    def remove_product_for_user(cls, user_id, product_upc):
         cart = CartModel.retrieve_cart_by_user_id(user_id)
-        cart.remove_product(product_upc, quantity)
+        cart.remove_product(product_upc)
         return cart.json()
     
     @classmethod
-    def increment_product_amt_for_user(cls, user_id, product_upc, quantity):
+    def increment_product_amt_for_user(cls, user_id, product_upc):
         cart = CartModel.retrieve_cart_by_user_id(user_id)
-        cart.increment_product_amt(product_upc, quantity)
+        cart.increment_product_amt(product_upc)
         return cart.json()
     
     @classmethod
-    def decrement_product_amt_for_user(cls, user_id, product_upc, quantity):
+    def decrement_product_amt_for_user(cls, user_id, product_upc):
         cart = CartModel.retrieve_cart_by_user_id(user_id)
-        cart.decrement_product_amt(product_upc, quantity)
+        cart.decrement_product_amt(product_upc)
         return cart.json()
     
     @classmethod
@@ -217,11 +223,14 @@ class CartModel:
         return cart.json()
 
     @classmethod
+    def update_product_quantity_for_user(cls, user_id, product_upc, new_quantity):
+        cart = CartModel.retrieve_cart_by_user_id(user_id)
+        cart.update_product_quantity(product_upc, new_quantity)
+        return cart.json()
+
+    @classmethod
     def retrieve_products_in_cart_for_user(cls, user_id):
         cart = CartModel.retrieve_cart_by_user_id(user_id) 
         return cart.json()
-
-
-
 
 
