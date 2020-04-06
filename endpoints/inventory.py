@@ -43,7 +43,6 @@ class InventoryProductList(Resource):
         else:
             return {'message': 'No products found!'}, 404
 
-
 class Shopping(Resource):
 
     def post(self):

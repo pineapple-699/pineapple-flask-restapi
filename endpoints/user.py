@@ -28,15 +28,12 @@ class UserRegister(Resource):
 
     def post(self):
         parser = reqparse.RequestParser()
-        parser.add_argument('username',
-                            type=str,
-                            required=True,
-                            help='This field is required!')
-
-        parser.add_argument('password',
-                            type=str,
-                            required=True,
-                            help='This field is required!')
+        arguments = ['username', 'password', 'sex', 'shoe_size', 'pant_size_waist', 'pant_size_length', 'shirt_size', 'shipping_address', 'billing_address']
+        for i in arguments:
+            parser.add_argument(i,
+                type=str,
+                required=True,
+                help='This field is required!')
 
         data_payload = parser.parse_args()
 
