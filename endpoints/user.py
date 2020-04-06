@@ -45,7 +45,7 @@ class UserRegister(Resource):
             return {'message': 'User successfully added to the database!'}, 201
 
 class Address(Resource):
-    def get(self, username, shipping_address, billing_address):
+    def get(self, username):
         shipping_address = AddressModel.get_default_shipping(username)
         billing_address = AddressModel.get_default_billing(username)
         if shipping_address:
