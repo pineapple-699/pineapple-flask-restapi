@@ -44,22 +44,35 @@ class UserRegister(Resource):
                                         data_payload['password'])
             return {'message': 'User successfully added to the database!'}, 201
 
-class Address(Resource):
-    def get(self, username):
-        shipping_address = AddressModel.get_default_shipping(username)
-        billing_address = AddressModel.get_default_billing(username)
+class ShippingAddress(Resource):
+    def get(self, user_id):
+        shipping_address = AddressModel.retrieve_user_billing_address_by_id(user_id)
         if shipping_address:
             return {
                 'shipping_address': shipping_address.json()}, 200
-        elif billing_address:
+        else:
+            return {'message': 'Shipping address not found!'}, 404
+
+class BillingAddress(Resource):
+    def get(self, user_id):
+        billing_address = AddressModel.retrieve_user_shipping_address_by_id(user_id)
+        if billing_address:
             return{
                 'billing_address': billing_address.json()}, 200
         else:
-            return {'message': 'Address not found!'}, 404
+            return {'message': 'Billing address not found!'}, 404
 
 class ShippingRegister(Resource):
     def post(self):
         parser = reqparse.RequestParser()
+        parser.add_argument('user_id',
+                            type=str,
+                            required=True,
+                            help='This field is required!')
+        parser.add_argument('full_name',
+                            type=str,
+                            required=True,
+                            help='This field is required!')
         parser.add_argument('address1',
                             type=str,
                             required=True,
@@ -82,16 +95,26 @@ class ShippingRegister(Resource):
 
         data_payload = parser.parse_args()
 
-        if AddressModel.get_default_shipping(data_payload['username']):
-            return {'message': 'User with the same address already exists in database!'}, 400
-        else:
-            AddressModel.insert_shipping(data_payload['username'],
-            data_payload['shipping_address'])
-            return {'message': 'Shipping address successfully added to the database!'}, 201
+        AddressModel.insert_user_shipping_address(data_payload['user_id'],
+                                                data_payload['full_name'],
+                                                data_payload['address1'],
+                                                data_payload['address2'],
+                                                data_payload['city'],
+                                                data_payload['state'],
+                                                data_payload['zipcode'])
+        return {'message': 'Shipping address successfully added to the database!'}, 201
 
 class BillingRegister(Resource):
     def post(self):
         parser = reqparse.RequestParser()
+        parser.add_argument('user_id',
+                            type=str,
+                            required=True,
+                            help='This field is required!')
+        parser.add_argument('full_name',
+                            type=str,
+                            required=True,
+                            help='This field is required!')
         parser.add_argument('address1',
                             type=str,
                             required=True,
@@ -114,9 +137,11 @@ class BillingRegister(Resource):
 
         data_payload = parser.parse_args()
 
-        if AddressModel.get_default_billing(data_payload['username']):
-            return {'message': 'User with the same address already exists in database!'}, 400
-        else:
-            AddressModel.insert_billing(data_payload['username'],
-            data_payload['billing_address'])
-            return {'message': 'Billing address successfully added to the database!'}, 201
+        AddressModel.insert_user_billing_address(data_payload['user_id'],
+                                                data_payload['full_name'],
+                                                data_payload['address1'],
+                                                data_payload['address2'],
+                                                data_payload['city'],
+                                                data_payload['state'],
+                                                data_payload['zipcode'])
+        return {'message': 'Shipping address successfully added to the database!'}, 201

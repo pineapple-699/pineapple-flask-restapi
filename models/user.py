@@ -157,7 +157,7 @@ class AddressModel:
         result = cursor.execute(query, (user_id,))
         row = result.fetchall()
         if row:
-            return AddressModel(row[0][0], row[0][1], row[0][2], row[0][3], row[0][4], row[0][5], row[0][6], row[0][7]).json()  
+            return AddressModel(row[0][0], row[0][1], row[0][2], row[0][3], row[0][4], row[0][5], row[0][6], row[0][7])
 
     @classmethod
     def retrieve_user_shipping_address_by_id(cls, user_id, db_path='./db/pineapplestore.db'):
@@ -167,7 +167,7 @@ class AddressModel:
         result = cursor.execute(query, (user_id,))
         row = result.fetchall()
         if row:
-            return AddressModel(row[0][0], row[0][1], row[0][2], row[0][3], row[0][4], row[0][5], row[0][6], row[0][7]).json()   
+            return AddressModel(row[0][0], row[0][1], row[0][2], row[0][3], row[0][4], row[0][5], row[0][6], row[0][7])   
     
     def json(self):
         return {
