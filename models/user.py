@@ -99,84 +99,83 @@ class UserModel:
 
 class AddressModel:
 
-    def __init__(self, id, username, full_name, address1, address2, city, state, zipcode):
+    def __init__(self, id, user_id, full_name, address1, address2, city, state, zipcode, db_path='./db/pineapplestore.db'):
         self.id = id
-        self.username = username
+        self.user_id = user_id
         self.full_name = full_name
         self.address1 = address1
         self.address2 = address2
         self.city = city
         self.state = state
         self.zipcode = zipcode
-
+    
     @classmethod
-    def get_default_billing(self, cls, db_path='./db/pineapplestore.db'):
-        users = list()
+    def insert_user_billing_address(cls, user_id, full_name, address1, address2, city, state, zipcode, db_path='./db/pineapplestore.db'):
         connection = sqlite3.connect(db_path)
         cursor = connection.cursor()
-        query = 'SELECT * FROM billing_address;'
+        query = 'SELECT * FROM billing_address WHERE user_id=?' 
+        cursor.execute(query, (user_id)) 
         result = cursor.execute(query)
-        rows = result.fetchall()
-        if rows:
-            for row in rows:
-                if row[4] == "":
-                    address = "{}, {}, {} {}".format(row[3], row[5], row[6], row[7])
-                else:   
-                    address = "{}, {}, {}, {} {}".format(row[3], row[4], row[5], row[6], row[7])
-                    users[row[1]] = address
-        return address
+        row = result.fetchall()
+        if row:
+            query = '{}{}{}'.format(
+                'UPDATE billing_address',
+                ' SET full_name=?, address1=?, address2=?, city=?, state=?, zipcode=?',
+                ' WHERE user_id=?')
+            cursor.execute(query, (full_name, address1, address2, city, state, zipcode, user_id))
+        else: 
+            query = 'INSERT INTO billing_address VALUES(NULL, ?, ?, ?, ?, ?, ?, ?);'
+            cursor.execute(query, (user_id, full_name, address1, address2, city, state, zipcode))
+        connection.commit()
+        connection.close()
+
+    @classmethod
+    def insert_user_shipping_address(cls, user_id, full_name, address1, address2, city, state, zipcode, db_path='./db/pineapplestore.db'):
+        connection = sqlite3.connect(db_path)
+        cursor = connection.cursor()
+        query = 'SELECT * FROM shipping_address WHERE user_id=?' 
+        cursor.execute(query, (user_id)) 
+        result = cursor.execute(query)
+
+        row = result.fetchall()
+        if row:
+            query = '{}{}{}'.format(
+                'UPDATE shipping_address',
+                ' SET full_name=?, address1=?, address2=?, city=?, state=?, zipcode=?',
+                ' WHERE user_id=?')
+            cursor.execute(query, (full_name, address1, address2, city, state, zipcode, user_id))
+        else: 
+            query = 'INSERT INTO shipping_address VALUES(NULL, ?, ?, ?, ?, ?, ?, ?);'
+            cursor.execute(query, (user_id, full_name, address1, address2, city, state, zipcode))
+        connection.commit()
         connection.close()
     
     @classmethod
-    def get_default_shipping(self, cls, db_path='./db/pineapplestore.db'):
-        users = {}
+    def retrieve_user_billing_address_by_id(cls, user_id, db_path='./db/pineapplestore.db')):
         connection = sqlite3.connect(db_path)
-        cursor = connection.cursor()
-        query = 'SELECT * FROM shipping_address;'
+        cursor = connection.cursor() 
+        query = 'SELECT * FROM billing_address WHERE user_id=?'   
+        cursor.execute(query, (user_id)) 
         result = cursor.execute(query)
-        rows = result.fetchall()
-        if rows:
-            for row in rows:
-                if row[4] == "":
-                    address = "{}, {}, {} {}".format(row[3], row[5], row[6], row[7])
-                else:   
-                    address = "{}, {}, {}, {} {}".format(row[3], row[4], row[5], row[6], row[7])
-                    users[row[1]] = address
-            return address
-        connection.close()
+        row = result.fetchall()
+        if row:
+            return AddressModel(row[0], row[1], row[2], row[3], row[4], row[5], row[6]. row[7]).json()   
 
     @classmethod
-    def insert_shipping(self, cls, shipping_address, db_path='./db/pineapplestore.db'):
-        users = {}
+    def retrieve_user_shipping_address_by_id(cls, user_id, db_path='./db/pineapplestore.db')):
         connection = sqlite3.connect(db_path)
-        cursor = connection.cursor()
-        for k in users.keys():
-            query = '{}{}{}'.format(
-            'UPDATE user',
-            ' SET shipping_address=?',
-            ' WHERE username=?')
-            cursor.execute(query, (users[k], k))
-        connection.commit()
-        connection.close()
-
-    @classmethod
-    def insert_billing(self, cls, billing_address, db_path='./db/pineapplestore.db'):
-        users = {}
-        connection = sqlite3.connect(db_path)
-        cursor = connection.cursor()
-        for k in users.keys():
-            query = '{}{}{}'.format(
-            'UPDATE user',
-            ' SET billing_address=?',
-            ' WHERE username=?')
-            cursor.execute(query, (users[k], k))
-        connection.commit()
-        connection.close()
+        cursor = connection.cursor() 
+        query = 'SELECT * FROM shipping_address WHERE user_id=?'   
+        cursor.execute(query, (user_id)) 
+        result = cursor.execute(query)
+        row = result.fetchall()
+        if row:
+            return AddressModel(row[0], row[1], row[2], row[3], row[4], row[5], row[6]. row[7]).json()   
     
     def json(self):
         return {
             'id': self.id,
-            'username': self.username,
+            'username': self.user_id,
             'full_name': self.full_name,
             'address1': self.address1,
             'address2': self.address2,
