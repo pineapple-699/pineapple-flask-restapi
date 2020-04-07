@@ -4,8 +4,9 @@ from flask_restful import Resource, reqparse
 
 class Inventory(Resource):
 
-    def get(self, product):
-        products = InventoryModel.find_by_product(product)
+    def get(self, productId):
+        products = InventoryModel.find_by_id(productId)
+        print(products)
         if products:
             return {
                 'product': [product.json() for product in products]
