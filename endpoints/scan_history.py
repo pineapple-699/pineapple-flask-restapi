@@ -20,10 +20,10 @@ class ScanHistoryRegister(Resource):
     def post(self):
         parser = reqparse.RequestParser()
 
-        parser.add_argument('upc',
+        parser.add_argument('product_id',
                             type=int,
                             required=True,
-                            help='This UPC field is mandatory!')
+                            help='This product_id field is mandatory!')
 
         parser.add_argument('user_id',
                             type=int,
@@ -32,12 +32,12 @@ class ScanHistoryRegister(Resource):
 
         data_payload = parser.parse_args()
 
-        scannedproduct = ScanHistoryModel.add_scanned_product_by_userid(data_payload['upc'],data_payload['user_id'])
+        scannedproduct = ScanHistoryModel.add_scanned_product_by_userid(data_payload['product_id'],data_payload['user_id'])
 
         if scannedproduct:
             return {'message': 'Scanned product already in database!'}
 
-        ScanHistoryModel.add_scanned_product_by_userid(data_payload['upc'],
+        ScanHistoryModel.add_scanned_product_by_userid(data_payload['product_id'],
                                 data_payload['user_id'])
 
         return {'message': 'Scanned Product successfully added to database!'}, 201

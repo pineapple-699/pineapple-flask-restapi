@@ -7,17 +7,17 @@ class ScanHistoryModel:
 
     db_path = './db/pineapplestore.db'
 
-    def __init__(self, id, upc, user_id):
+    def __init__(self, id, product_id, user_id):
         self.id = id
-        self.upc = upc
+        self.product_id = product_id
         self.user_id = user_id
 
     @classmethod
-    def add_scanned_product_by_userid(self, upc, user_id):
+    def add_scanned_product_by_userid(self, product_id, user_id):
         connection = sqlite3.connect('./db/pineapplestore.db')
         cursor = connection.cursor()
         query = 'INSERT INTO scan_history VALUES(NULL, ?, ?);'
-        cursor.execute(query, (upc, user_id,))
+        cursor.execute(query, (product_id, user_id,))
         connection.commit()
         connection.close()
         
@@ -36,9 +36,9 @@ class ScanHistoryModel:
             for row in rows:
                 scannedproduct = ScanHistoryModel(row[0], row[1], row[2])
                 
-                product_query = 'SELECT * FROM inventory WHERE upc=?;'
-                product_results = cursor.execute(product_query, (scannedproduct.upc,))
-                product_rows = product_results.fetchall()
+                # product_query = 'SELECT * FROM inventory WHERE upc=?;'
+                # product_results = cursor.execute(product_query, (scannedproduct.upc,))
+                # product_rows = product_results.fetchall()
 
                 # if product_rows:
                 #     for row in product_rows:
@@ -55,7 +55,7 @@ class ScanHistoryModel:
 
     def json(self):
         return {
-            'scanned product id': self.id,
-            'scanned product upc': self.upc,
-            'scanned product user id': self.user_id
+            'id': self.id,
+            'product_id': self.product_id,
+            'user_id': self.user_id
         }

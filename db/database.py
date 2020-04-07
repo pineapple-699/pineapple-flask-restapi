@@ -32,7 +32,7 @@ cursor.execute(create_inventory_table)
 
 create_scanhistory= '{}{}{}'.format(
     'CREATE TABLE IF NOT EXISTS',
-    ' scan_history(id INTEGER PRIMARY KEY AUTOINCREMENT, upc INTEGER,',
+    ' scan_history(id INTEGER PRIMARY KEY AUTOINCREMENT, product_id INTEGER,',
     ' user_id text);'
 )
 cursor.execute(create_scanhistory)
