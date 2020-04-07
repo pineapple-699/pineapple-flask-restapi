@@ -22,6 +22,7 @@ class CartModel:
                 break
         if not product_already_in_cart:
             product_info = InventoryModel.find_product_by_upc(product_upc).json()
+            print(product_info)
             self.products.append({"product_info": product_info, "quantity": quantity})
         self.save_cart_items_into_db()
         self.total += quantity * InventoryModel.find_product_by_upc(product_upc).json()['price']
