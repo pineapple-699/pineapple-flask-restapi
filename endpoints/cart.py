@@ -22,7 +22,7 @@ class Cart(Resource):
                             help='This field is mandatory!')
         parser.add_argument('quantity',
                             type=int,
-                            required=True,
+                            required=False,
                             help='This field is necessary only when adding product and updating product quantity.')
         parser.add_argument('new_size',
                             type=int,
