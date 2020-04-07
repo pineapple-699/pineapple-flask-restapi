@@ -114,7 +114,7 @@ class AddressModel:
         users = list()
         connection = sqlite3.connect(db_path)
         cursor = connection.cursor()
-        query = 'SELECT * FROM billing_address;'
+        query = 'SELECT * FROM billing_address WHERE id=?;'
         result = cursor.execute(query)
         rows = result.fetchall()
         if rows:
@@ -123,8 +123,7 @@ class AddressModel:
                     address = "{}, {}, {} {}".format(row[3], row[5], row[6], row[7])
                 else:   
                     address = "{}, {}, {}, {} {}".format(row[3], row[4], row[5], row[6], row[7])
-                    users[row[1]] = address
-        return address
+            return address
         connection.close()
     
     @classmethod
@@ -132,7 +131,7 @@ class AddressModel:
         users = {}
         connection = sqlite3.connect(db_path)
         cursor = connection.cursor()
-        query = 'SELECT * FROM shipping_address;'
+        query = 'SELECT * FROM shipping_address WHERE id=?;'
         result = cursor.execute(query)
         rows = result.fetchall()
         if rows:
@@ -141,7 +140,6 @@ class AddressModel:
                     address = "{}, {}, {} {}".format(row[3], row[5], row[6], row[7])
                 else:   
                     address = "{}, {}, {}, {} {}".format(row[3], row[4], row[5], row[6], row[7])
-                    users[row[1]] = address
             return address
         connection.close()
 

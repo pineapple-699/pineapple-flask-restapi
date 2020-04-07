@@ -45,9 +45,9 @@ class UserRegister(Resource):
             return {'message': 'User successfully added to the database!'}, 201
 
 class Address(Resource):
-    def get(self, username, shipping_address, billing_address):
-        shipping_address = AddressModel.get_default_shipping(username)
-        billing_address = AddressModel.get_default_billing(username)
+    def get(self, userid, shipping_address, billing_address):
+        shipping_address = AddressModel.get_default_shipping(userid)
+        billing_address = AddressModel.get_default_billing(userid)
         if shipping_address:
             return {
                 'shipping_address': shipping_address.json()}, 200
@@ -82,10 +82,10 @@ class ShippingRegister(Resource):
 
         data_payload = parser.parse_args()
 
-        if AddressModel.get_default_shipping(data_payload['username']):
+        if AddressModel.get_default_shipping(data_payload['userid']):
             return {'message': 'User with the same address already exists in database!'}, 400
         else:
-            AddressModel.insert_shipping(data_payload['username'],
+            AddressModel.insert_shipping(data_payload['userid'],
             data_payload['shipping_address'])
             return {'message': 'Shipping address successfully added to the database!'}, 201
 
@@ -114,9 +114,9 @@ class BillingRegister(Resource):
 
         data_payload = parser.parse_args()
 
-        if AddressModel.get_default_billing(data_payload['username']):
+        if AddressModel.get_default_billing(data_payload['userid']):
             return {'message': 'User with the same address already exists in database!'}, 400
         else:
-            AddressModel.insert_billing(data_payload['username'],
+            AddressModel.insert_billing(data_payload['userid'],
             data_payload['billing_address'])
             return {'message': 'Billing address successfully added to the database!'}, 201
