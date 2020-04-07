@@ -24,11 +24,18 @@ cursor.execute(create_history_table)
 
 create_inventory_table = '{}{}{}{}'.format(
     'CREATE TABLE IF NOT EXISTS',
-    ' inventory(id INTEGER PRIMARY KEY, sku text, upc INTEGER,',
+    ' inventory(id INTEGER PRIMARY KEY , sku text, upc INTEGER,',
     ' rando text, product text, description text, price FLOAT,', 
     ' size text, color text, amt INTEGER, store text, picture text);'
 )
 cursor.execute(create_inventory_table)
+
+create_scanhistory= '{}{}{}'.format(
+    'CREATE TABLE IF NOT EXISTS',
+    ' scan_history(id INTEGER PRIMARY KEY AUTOINCREMENT, upc INTEGER,',
+    ' user_id text);'
+)
+cursor.execute(create_scanhistory)
 
 '''Database Design for Cart:
 

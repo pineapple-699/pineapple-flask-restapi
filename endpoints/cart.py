@@ -34,7 +34,7 @@ class Cart(Resource):
                             help='This field is necessary only when changing product color.')
         parser.add_argument('type',
                             type=str,
-                            required=False,
+                            required=True,
                             help='This field is mandatory!')
 
         data_payload = parser.parse_args()
