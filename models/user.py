@@ -99,7 +99,7 @@ class UserModel:
 
 class AddressModel:
 
-    def __init__(self, id, user_id, full_name, address1, address2, city, state, zipcode, db_path='./db/pineapplestore.db'):
+    def __init__(self, id, user_id, full_name, address1, address2, city, state, zipcode):
         self.id = id
         self.user_id = user_id
         self.full_name = full_name
@@ -110,12 +110,12 @@ class AddressModel:
         self.zipcode = zipcode
     
     @classmethod
+    # insert address if not exists and update address if exists
     def insert_user_billing_address(cls, user_id, full_name, address1, address2, city, state, zipcode, db_path='./db/pineapplestore.db'):
         connection = sqlite3.connect(db_path)
         cursor = connection.cursor()
         query = 'SELECT * FROM billing_address WHERE user_id=?' 
-        cursor.execute(query, (user_id)) 
-        result = cursor.execute(query)
+        result = cursor.execute(query, (user_id,))
         row = result.fetchall()
         if row:
             query = '{}{}{}'.format(
@@ -124,19 +124,18 @@ class AddressModel:
                 ' WHERE user_id=?')
             cursor.execute(query, (full_name, address1, address2, city, state, zipcode, user_id))
         else: 
-            query = 'INSERT INTO billing_address VALUES(NULL, ?, ?, ?, ?, ?, ?, ?);'
+            query = 'INSERT INTO billing_address (user_id, full_name, address1, address2, city, state, zipcode) VALUES(?, ?, ?, ?, ?, ?, ?);'
             cursor.execute(query, (user_id, full_name, address1, address2, city, state, zipcode))
         connection.commit()
         connection.close()
 
     @classmethod
+    # insert address if not exists and update address if exists
     def insert_user_shipping_address(cls, user_id, full_name, address1, address2, city, state, zipcode, db_path='./db/pineapplestore.db'):
         connection = sqlite3.connect(db_path)
         cursor = connection.cursor()
         query = 'SELECT * FROM shipping_address WHERE user_id=?' 
-        cursor.execute(query, (user_id)) 
-        result = cursor.execute(query)
-
+        result = cursor.execute(query, (user_id,))
         row = result.fetchall()
         if row:
             query = '{}{}{}'.format(
@@ -145,32 +144,30 @@ class AddressModel:
                 ' WHERE user_id=?')
             cursor.execute(query, (full_name, address1, address2, city, state, zipcode, user_id))
         else: 
-            query = 'INSERT INTO shipping_address VALUES(NULL, ?, ?, ?, ?, ?, ?, ?);'
+            query = 'INSERT INTO shipping_address (user_id, full_name, address1, address2, city, state, zipcode) VALUES(?, ?, ?, ?, ?, ?, ?);'
             cursor.execute(query, (user_id, full_name, address1, address2, city, state, zipcode))
         connection.commit()
         connection.close()
     
     @classmethod
-    def retrieve_user_billing_address_by_id(cls, user_id, db_path='./db/pineapplestore.db')):
+    def retrieve_user_billing_address_by_id(cls, user_id, db_path='./db/pineapplestore.db'):
         connection = sqlite3.connect(db_path)
         cursor = connection.cursor() 
         query = 'SELECT * FROM billing_address WHERE user_id=?'   
-        cursor.execute(query, (user_id)) 
-        result = cursor.execute(query)
+        result = cursor.execute(query, (user_id,))
         row = result.fetchall()
         if row:
-            return AddressModel(row[0], row[1], row[2], row[3], row[4], row[5], row[6]. row[7]).json()   
+            return AddressModel(row[0][0], row[0][1], row[0][2], row[0][3], row[0][4], row[0][5], row[0][6], row[0][7]).json()  
 
     @classmethod
-    def retrieve_user_shipping_address_by_id(cls, user_id, db_path='./db/pineapplestore.db')):
+    def retrieve_user_shipping_address_by_id(cls, user_id, db_path='./db/pineapplestore.db'):
         connection = sqlite3.connect(db_path)
         cursor = connection.cursor() 
         query = 'SELECT * FROM shipping_address WHERE user_id=?'   
-        cursor.execute(query, (user_id)) 
-        result = cursor.execute(query)
+        result = cursor.execute(query, (user_id,))
         row = result.fetchall()
         if row:
-            return AddressModel(row[0], row[1], row[2], row[3], row[4], row[5], row[6]. row[7]).json()   
+            return AddressModel(row[0][0], row[0][1], row[0][2], row[0][3], row[0][4], row[0][5], row[0][6], row[0][7]).json()   
     
     def json(self):
         return {
@@ -183,3 +180,9 @@ class AddressModel:
             'state': self.state,
             'zipcode': self.zipcode 
         }
+
+
+# AddressModel.insert_user_billing_address(7, "Test User", "billing address 1", "address 2", "city", "state", "48207")
+# AddressModel.insert_user_shipping_address(7, "Test User", "shipping address 1", "address 2", "city", "state", "48207")
+# print(AddressModel.retrieve_user_billing_address_by_id(1))
+# print(AddressModel.retrieve_user_shipping_address_by_id(7))
