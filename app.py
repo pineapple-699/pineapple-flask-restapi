@@ -7,6 +7,7 @@ from flask_restful import Resource, Api
 from endpoints.user import User, UserList, UserRegister, ShippingRegister, BillingRegister
 from endpoints.inventory import Inventory, InventoryProductList, Shopping
 from endpoints.purchase_history import PurchaseHistory
+from endpoints.cart import Cart
 # from db.database import create_database
 
 
@@ -35,6 +36,7 @@ api.add_resource(PurchaseHistory, '/history/<string:name>')
 api.add_resource(Shopping, '/shopping')
 api.add_resource(ShippingRegister, '/users/shipping')
 api.add_resource(BillingRegister, '/users/billing')
+api.add_resource(Cart, '/cart/<string:userid>')
 
 
 

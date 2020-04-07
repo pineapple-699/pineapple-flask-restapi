@@ -44,11 +44,11 @@ class UserModel:
             return user
 
     @classmethod
-    def insert_into_table(cls, username, password, db_path='./db/pineapplestore.db'):
+    def insert_into_table(cls,username, password, sex, shoe_size, pant_size_waist, pant_size_length, shirt_size, shipping_address, billing_address, db_path='./db/pineapplestore.db'):
         connection = sqlite3.connect(db_path)
         cursor = connection.cursor()
-        query = 'INSERT INTO user VALUES(NULL, ?, ?,NULL,NULL,NULL,NULL,NULL,NULL)'
-        cursor.execute(query, (username, password))
+        query = 'INSERT OR REPLACE INTO user (username, password, sex, shoe_size, pant_size_waist, pant_size_length, shirt_size, shipping_address, billing_address) VALUES(?,?,?,?,?,?,?,?,?)'
+        cursor.execute(query, (username, password, sex, shoe_size, pant_size_waist, pant_size_length, shirt_size, shipping_address, billing_address))
         connection.commit()
         connection.close()
 
