@@ -2,7 +2,7 @@ import sqlite3
 import csv
 import sys
 
-connection = sqlite3.connect("/Users/jalinparker/699-UCAD/pineapple-flask-restapi/db/pineapplestore.db")
+connection = sqlite3.connect("./db/pineapplestore.db")
 cursor = connection.cursor()
 create_user_table = '{}{}{}'.format(
     'CREATE TABLE IF NOT EXISTS',
@@ -73,7 +73,6 @@ cursor.execute('INSERT OR REPLACE INTO user (username, password, sex, shoe_size,
 cursor.execute('INSERT OR REPLACE INTO user (username, password, sex, shoe_size, pant_size_waist, pant_size_length, shirt_size, shipping_address, billing_address) VALUES("tayloir_thompson", "aqwerva", "Female", "12", "30","30","XL", "Ann Arbor", "MI");')
 
 with open("./db/pineapple_inventory.csv", "rt") as f:
-with open("/Users/jalinparker/699-UCAD/pineapple-flask-restapi/db/pineapple_inventory.csv", "rt") as f:
     rows = csv.reader(f)
     next(rows) # Skip the header row.
     for row in rows:
