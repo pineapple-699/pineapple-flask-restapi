@@ -30,7 +30,7 @@ def home():
 
 api.add_resource(User, '/users/<string:name>')
 api.add_resource(UserList, '/users')
-api.add_resource(UserRegister, '/register')
+api.add_resource(UserRegister, '/users/<string:user_id>/register')
 api.add_resource(Inventory, '/product/<string:productId>')
 api.add_resource(InventoryProductList, '/products')
 api.add_resource(PurchaseHistory, '/history/<string:name>')
@@ -39,8 +39,8 @@ api.add_resource(ScanHistoryRegister, '/history/scan')
 api.add_resource(Shopping, '/shopping')
 api.add_resource(ShippingAddress, '/users/<string:user_id>/shippingaddress')
 api.add_resource(BillingAddress, '/users/<string:user_id>/billingaddress')
-api.add_resource(ShippingRegister, '/users/shipping')
-api.add_resource(BillingRegister, '/users/billing')
+api.add_resource(ShippingRegister, '/users/<string:user_id>/shippingregister')
+api.add_resource(BillingRegister, '/users/<string:user_id>/billingregister')
 api.add_resource(Cart, '/cart/<string:userid>')
 
 
