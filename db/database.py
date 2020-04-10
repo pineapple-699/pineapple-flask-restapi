@@ -15,7 +15,7 @@ cursor.execute(create_user_table)
 create_history_table ='{}{}{}{}{}{}'.format(
     'CREATE TABLE IF NOT EXISTS',
     ' purchase_history(id INTEGER PRIMARY KEY,',
-    ' product text, user_id INTEGER NOT NULL,',
+    ' user_id INTEGER NOT NULL,',
     ' product_id INTEGER NOT NULL,',
     ' FOREIGN KEY (user_id) REFERENCES user(id),', 
     ' FOREIGN KEY (product_id) REFERENCES inventory(id));'
@@ -78,8 +78,6 @@ with open("./db/pineapple_inventory.csv", "rt") as f:
     for row in rows:
         query = "INSERT OR REPLACE INTO inventory VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
         cursor.execute(query, row)
-
-cursor.execute('INSERT OR REPLACE INTO purchase_history VALUES(1, "tshirt", 1, 1);')
 
 create_shipping_address_table = '{}{}{}{}{}'.format(
     'CREATE TABLE IF NOT EXISTS',

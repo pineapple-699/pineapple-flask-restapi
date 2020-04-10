@@ -6,25 +6,24 @@ class PurchaseHistoryModel:
 
     db_path = './db/pineapplestore.db'
 
-    def __init__(self, id, product, user_id, product_id):
+    def __init__(self, id, user_id, product_id):
         self.id = id
-        self.product = product
         self.user_id = user_id
         self.product_id = product_id
 
     @classmethod
-    def find_history_product_by_name(cls, name):
+    def find_history_product_by_userId(cls, userid):
 
         history_products = list()
 
         connection = sqlite3.connect(cls.db_path)
         cursor = connection.cursor()
-        query = 'SELECT * FROM purchase_history WHERE product=?;'
-        resluts = cursor.execute(query, (name,))
+        query = 'SELECT * FROM purchase_history WHERE user_id=?;'
+        resluts = cursor.execute(query, (userid,))
         rows = resluts.fetchall()
         if rows:
             for row in rows:
-                product = PurchaseHistoryModel(row[0], row[1], row[2], row[3])
+                product = PurchaseHistoryModel(row[0], row[1], row[2])
                 history_products.append(product)
             connection.close()
             return history_products
@@ -43,15 +42,23 @@ class PurchaseHistoryModel:
             rows = result.fetchall()
             if rows:
                 for row in rows:
-                    products = PurchaseHistoryModel(row[0], row[1], row[2], row[3])
+                    products = PurchaseHistoryModel(row[0], row[1], row[2])
                     products_history_list.append(products)
                 connection.close()
                 return products_history_list
 
+    @classmethod
+    def add_purchase(self, user_id, product_id):
+        connection = sqlite3.connect('./db/pineapplestore.db')
+        cursor = connection.cursor()
+        query = 'INSERT INTO purchase_history VALUES(NULL, ?, ?);'
+        cursor.execute(query, (user_id, product_id,))
+        connection.commit()
+        connection.close()
+
     def json(self):
         return {
-            'user': self.user_id,
-            'product history id': self.id,
-            'product name': self.product,
-            'product store number': self.product_id
+            'purchase_id': self.id,
+            'user_id': self.user_id,
+            'product_id': self.product_id,
         }
