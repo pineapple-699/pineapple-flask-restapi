@@ -30,7 +30,7 @@ def home():
 
 api.add_resource(User, '/users/<string:name>')
 api.add_resource(UserList, '/users')
-api.add_resource(UserRegister, '/users/<string:user_id>/register')
+api.add_resource(UserRegister, '/user/register')
 api.add_resource(Inventory, '/product/<string:productId>')
 api.add_resource(InventoryProductList, '/products')
 api.add_resource(PurchaseHistory, '/history/<string:name>')

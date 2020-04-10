@@ -39,13 +39,21 @@ class UserRegister(Resource):
         if UserModel.find_by_name(data_payload['username']):
             return {'message': 'User with the same name already exists in database!'}, 400
         else:
-            for n in arguments:
-                UserModel.insert_into_table(data_payload[n])
+            # dataLoaded = []
+            # for n in arguments:
+            #     dataLoaded.append(data_payload[n])
+            UserModel.insert_into_table(data_payload['username'],
+                                        data_payload['password'],
+                                        data_payload['sex'],
+                                        data_payload['shoe_size'],
+                                        data_payload['pant_size_waist'],
+                                        data_payload['pant_size_length'],
+                                        data_payload['shirt_size'],
+                                        data_payload['shipping_address'],
+                                        data_payload['billing_address']
+                                        )
+            # UserModel.insert_into_table(dataLoaded)
             return {'message': 'User successfully added to the database!'}, 201
-            # UserModel.insert_into_table(data_payload['username'],
-            #                             data_payload['password'],
-            #                             data_payload['sex'])
-            # return {'message': 'User successfully added to the database!'}, 201
 
 class ShippingAddress(Resource):
     def get(self, user_id):

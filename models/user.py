@@ -17,7 +17,7 @@ class UserModel:
 
 
     @classmethod
-    def find_by_name(cls, name, db_path='/Users/jalinparker/699-UCAD/pineapple-flask-restapi/db/pineapplestore.db'):
+    def find_by_name(cls, name, db_path='./db/pineapplestore.db'):
         connection = sqlite3.connect(db_path)
         cursor = connection.cursor()
         query = 'SELECT * FROM user WHERE username=?;'
