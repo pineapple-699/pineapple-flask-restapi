@@ -66,12 +66,12 @@ class ShippingAddress(Resource):
 
 class BillingAddress(Resource):
     def get(self, user_id):
-        billing_address = AddressModel.retrieve_user_billing_address_by_id(user_id)
+        billing_address = AddressModel.retrieve_user_shipping_address_by_id(user_id)
         if billing_address:
-            return {
+            return{
                 'billing_address': billing_address.json()}, 200
         else:
-            return {'message': 'Shipping address not found!'}, 404
+            return {'message': 'Billing address not found!'}, 404
 
 class ShippingRegister(Resource):
     def post(self):
