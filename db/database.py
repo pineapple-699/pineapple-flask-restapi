@@ -114,6 +114,7 @@ cursor.execute('INSERT OR REPLACE INTO billing_address VALUES(NULL, 4, "Kangning
 cursor.execute('INSERT OR REPLACE INTO billing_address VALUES(NULL, 5, "Yunqi Qian", "131 Java St", "", "Ann Arbor", "MI", "48104");')
 cursor.execute('INSERT OR REPLACE INTO billing_address VALUES(NULL, 6, "Tayloir Thompson", "415 PHP St", "2A", "Ann Arbor", "MI", "48109");')
 
+
 connection.commit()
 connection.close()
 

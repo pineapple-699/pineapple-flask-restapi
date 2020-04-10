@@ -155,6 +155,7 @@ class CartModel:
         rows = result.fetchall()
         if rows:
             for row in rows:
+                print(row)
                 quantity = row[1]
                 product_upc = row[2]
                 product_info = InventoryModel.find_product_by_upc(product_upc).json()

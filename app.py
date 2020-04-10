@@ -4,7 +4,7 @@ from flask_restful import Resource, Api
 # from flask_jwt import JWT, jwt_required, JWTError
 
 
-from endpoints.user import User, UserList, Address, UserRegister, ShippingRegister, BillingRegister
+from endpoints.user import User, UserList, UserRegister, ShippingRegister, BillingRegister, ShippingAddress, BillingAddress
 from endpoints.inventory import Inventory, InventoryProductList, Shopping
 from endpoints.purchase_history import PurchaseHistory
 from endpoints.scan_history import ScanHistory, ScanHistoryRegister
@@ -30,7 +30,7 @@ def home():
 
 api.add_resource(User, '/users/<string:name>')
 api.add_resource(UserList, '/users')
-api.add_resource(UserRegister, '/users/<string:user_id>/register')
+api.add_resource(UserRegister, '/user/register')
 api.add_resource(Inventory, '/product/<string:productId>')
 api.add_resource(InventoryProductList, '/products')
 api.add_resource(PurchaseHistory, '/history/<string:name>')

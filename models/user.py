@@ -172,7 +172,7 @@ class AddressModel:
     def json(self):
         return {
             'id': self.id,
-            'username': self.user_id,
+            'user_id': self.user_id,
             'full_name': self.full_name,
             'address1': self.address1,
             'address2': self.address2,
@@ -186,3 +186,6 @@ class AddressModel:
 # AddressModel.insert_user_shipping_address(7, "Test User", "shipping address 1", "address 2", "city", "state", "48207")
 # print(AddressModel.retrieve_user_billing_address_by_id(1))
 # print(AddressModel.retrieve_user_shipping_address_by_id(7))
+
+# print(AddressModel.insert_user_billing_address(7, "Test User", "billing address 1", "address 2", "city", "state", "48207"))
+

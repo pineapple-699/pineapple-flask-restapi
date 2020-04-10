@@ -25,7 +25,6 @@ class UserList(Resource):
         return {'message': 'No users found!'}, 404
 
 class UserRegister(Resource):
-
     def post(self):
         parser = reqparse.RequestParser()
         arguments = ['username', 'password', 'sex', 'shoe_size', 'pant_size_waist', 'pant_size_length', 'shirt_size', 'shipping_address', 'billing_address']
@@ -40,8 +39,20 @@ class UserRegister(Resource):
         if UserModel.find_by_name(data_payload['username']):
             return {'message': 'User with the same name already exists in database!'}, 400
         else:
+            # dataLoaded = []
+            # for n in arguments:
+            #     dataLoaded.append(data_payload[n])
             UserModel.insert_into_table(data_payload['username'],
-                                        data_payload['password'])
+                                        data_payload['password'],
+                                        data_payload['sex'],
+                                        data_payload['shoe_size'],
+                                        data_payload['pant_size_waist'],
+                                        data_payload['pant_size_length'],
+                                        data_payload['shirt_size'],
+                                        data_payload['shipping_address'],
+                                        data_payload['billing_address']
+                                        )
+            # UserModel.insert_into_table(dataLoaded)
             return {'message': 'User successfully added to the database!'}, 201
 
 class ShippingAddress(Resource):
@@ -144,4 +155,4 @@ class BillingRegister(Resource):
                                                 data_payload['city'],
                                                 data_payload['state'],
                                                 data_payload['zipcode'])
-        return {'message': 'Shipping address successfully added to the database!'}, 201
+        return {'message': 'Billing address successfully added to the database!'}, 201
