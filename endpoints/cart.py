@@ -17,7 +17,7 @@ class Cart(Resource):
         parser = reqparse.RequestParser()
 
         parser.add_argument('product_upc',
-                            type=str,
+                            type=int,
                             required=True,
                             help='This field is mandatory!')
         parser.add_argument('quantity',
